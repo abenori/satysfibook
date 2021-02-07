@@ -86,5 +86,28 @@ let page-breaking = '<
           record [({text-height}, length); ({text-origin}, point)]
       ));
     }%
-
+    From this code, you see 2nd argument provided to \codem{page-break}
+    is a function that receives a record and returns record.
+    This function called at time within processing page-breaking;
+    determined page contents until ${\paren{n - 1}} page,
+    and pass a record
+    \codem{(\| page-number = \meta{n}\; \|)}
+    to figure out separate contents of ${n} page from sequence of block-boxes left.
+    And the function returns value to page-breaking processing system below:
+    \codem{(\| text-height = \meta{h}\; text-origin = (\meta{x}, \meta{y})\; \|)}
+    The information contains below:
+    \listing{
+      * ${h}：\quad;
+          Length of block-progression direction of contents text-area at ${n} page.
+      * ${\tuple{|x|y|}}：\quad;
+        Left-top coordinate to position contents actually separated. 
+    }%
+    But, you should take care about difference between axis of Graphics; ${y} of ${\tuple{|x|y|}} at here is 
+    a value based on an axis it is that having direction to bottom is ${+y}
+    and left-top on paper as origin.
+    If you want document pages as same format, having same length of texts from same point, on each pages,
+    you can set a function that returns static ${h} and ${\tuple{|x|y|}} not depends on ${n}.
+    If you want change margins between left and right (general case is binding),
+    you can set a function returns which value depends on ${n} is odd-or-even. 
+  }
 >
