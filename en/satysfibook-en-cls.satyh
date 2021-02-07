@@ -34,3 +34,7 @@ let-inline ctx \LaTeX =
 
 
 let-inline \file f = {\code(f);}
+
+let-block +example t = '<+p{#t;}>
+let-inline \dfn t = {#t;}
+

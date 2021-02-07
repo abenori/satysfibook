@@ -32,18 +32,18 @@ let-block +chap2 = '<
         Here is an example of a document file.
       }
       +code(`
-        @require: stdjareport
-        document (|
-        title = {An example};
-        author = {Type set};
-        |) '<
-          +chapter{First chapter}<
-            +p{
-              This is the first paragraph by \SATySFi;
-              Paragraphs are marked with \defn{block command}.
-            }
-          >
-        >
+@require: stdjareport
+document (|
+title = {An example};
+author = {Type set};
+|) '<
+  +chapter{First chapter}<
+    +p{
+      This is the first paragraph by \SATySFi;
+      Paragraphs are marked with \defn{block command}.
+    }
+  >
+>
       `);
       +p{
          Indents have no meaning with parsing, so you can do it as you want\footnote{Of course, customary I recommend to add indents according to the levels of nests.}.
@@ -51,7 +51,7 @@ let-block +chap2 = '<
          By writing 
        }
        +code(`
-         @require: <package name>
+@require: <package name>
        `);
        +pn{
         in the preamble, one can include the package file installed in the system.
@@ -62,7 +62,7 @@ let-block +chap2 = '<
         (“Local”) Package files in the directory which the document file can be loaded with
       }
       +code(`
-        @import: <The relative path to the file>
+@import: <The relative path to the file>
       `);
       +pn{
         Similar to the above, the extension is automatically added, hence it is not written.
@@ -89,7 +89,7 @@ let-block +chap2 = '<
         Open the terminal, moving the directory which \code(`hello.saty`); is, and execute
       }
       +code(`
-        satysfi hello.saty
+satysfi hello.saty
       `);
       +pn{
         If you have no error in the document file, the file \file(`hello.satysfi-aux`); and \code(`hello.pdf`); should be generated.
@@ -110,9 +110,9 @@ let-block +chap2 = '<
         As below, one can use \code(`+p`); in block texts:
       }
       +code(`
-        +p{
-          Tomorrow is another day.
-        }
++p{
+  Tomorrow is another day.
+}
       `);
       +p{
         Things which I wrote “blocks” is not really “block texts”, but at this point it is safe to think them as somethings similar to block texts.
@@ -129,9 +129,7 @@ let-block +chap2 = '<
         }
         To give arguments to a command is called the \emph{application} of the command.
         The syntax of applications are expressed as
-        \code(`
-          cmd[(...)]*(;|[({...}|<...>)]*)
-        `);
+        \code(`cmd[(...)]*(;|[({...}|<...>)]*)`);
         using a meta syntax like a regular expression.
         Here \code(`cmd`); means an inline command in inline texts and a block command in block texts.
         Namely, the application of a command starts with a command following some (possibly zero) arguments and after that \code(`;`); or some (should be greater than zero) inline or block arguments follow.
@@ -151,9 +149,9 @@ let-block +chap2 = '<
         These commands are used as
       }
       +code(`
-        +chapter{chapter title}<
-          contents
-        >
++chapter{chapter title}<
+  contents
+>
       `);
       +pn{
         in block texts.
@@ -163,5 +161,64 @@ let-block +chap2 = '<
         The usages of \code(`+section`); and \code(`+subsection`); are completely the same.
       }
     >
+    +subsection{New words}<
+      +p{
+        One uses \code(`\defn`); to a name etc. defined first in a document as follows.
+      }
+      +code(`
++p{
+  Arranging fonts and pictures following a manuscript and a design and make printed pages are called \dfn{typsettings}.
+}
+      `);
+      +example{
+        Arranging fonts and pictures following a manuscript and a design and make printed pages are called \dfn{typsettings}.
+      }
+      +pn{
+        Latin characters in the argument is output by italic characters.
+        Like this, an inline commands is a command which returns “a list of (possibly modified) strings”.
+        As one can see from the syntax of applications of commands, a semicolon is added for a command with no argument.
+      }
+      +code(`
++p{ \SATySFi; is a new typesetting system.}
+      `);
+      +example{\SATySFi; is a new typesetting system.}
+    >
+  >
+  +subsection{Inline equations}<
+    +p{
+      Inline equations is written in \code(`${...}`); in inline texts.
+      The syntax is very similar to that of \LaTeX;
+      In the following example, the contents inside \code(`${...}`); is the same as that of \LaTeX;
+    }
+    +code(`
++p{
+  Equations can be written as ${E = mc^2}, ${F = G\frac{m_1 m_2}{r^2}}, ${x^x = e^{x \log x}}, like \LaTeX;}
+}
+    `);
+    +example{
+      Equations can be written as ${E = mc^2}, ${F = G\frac{m_1 m_2}{r^2}}, ${x^x = e^{x \log x}}, like \LaTeX;
+    }
+    +pn{
+      Math commands which are commands in equations start with \code(`\`); which is the same as inline commands.
+      You can not use the same name for a math command and an inline command.
+      (Namely the name space is not separated.)
+      Unlike the case of inline commands, \code(`;`); is not needed for the application of a math commands with no argument.
+    }
+    +p{
+      Even though the syntax is similar to that of \LaTeX;, there are some differences.
+      Especially how to write parentheses are very different from \LaTeX;
+      There is nothing corresponding to \code(`\left`);, \code(`\right`); and \code(`\middle`);.
+      Instead of this, a one command provides both open and close parentheses.
+      If you want to use parentheses, use \code(`\paren{equation}`);
+      One can use \code(`\set{...}`); for .... and \code(`\setsep{...}{...}`); for a set-builder notation, \code(`\abs{...}`); for absolute values, \code(`\dist{...}`); for two line brackes used for distance or norm.
+      An application of a function can be written as \code(`\app{f}{x}`);
+    }
+    +p{
+      Square brackets, curly brackets (which is not necessary for set notation), triangle brackets are provided by \code(`\sqbracket{...}`);, \code(`\brace{...}`); and \code(`\angle-bracket{...}`);, respectively.
+      Because these commands does not point their “meanings”, it is supposed to not used in equations directly but used in commands defined by users (explained later)\footnote{However, in the next subsection, \code(`\sqbracket`); in equation will be appeared...}.
+    }
+    +p{
+      More details of equations will be explained in chapter 10.
+    }
   >
 >
