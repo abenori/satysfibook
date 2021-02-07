@@ -1,0 +1,36 @@
+% will be a class file
+
+@require: stdjabook
+@require: code
+
+let-inline ctx \TeX = 
+  let font-size = get-font-size ctx in
+  let (xw,xh,xe) = get-natural-metrics (read-inline ctx {x}) in
+  let eb = read-inline ctx {E} in
+  let (ew,eh,ed) = get-natural-metrics eb in
+  (read-inline ctx {T}) ++
+  (inline-skip (0pt -' (font-size *' 0.1667))) ++
+  (inline-graphics ew (eh -' (xw *' 0.5)) (ed +' (xw *' 0.5)) (fun (x,y) -> ([
+    draw-text (x,y -' (xw *' 0.5)) eb
+  ]))) ++
+  (inline-skip (0pt -' (font-size *' 0.125))) ++
+  (read-inline ctx {X})
+
+let-inline ctx \LaTeX = 
+  let tb = read-inline ctx {T} in
+  let (tw,th,td) = get-natural-metrics tb in
+  let font-size = get-font-size ctx in
+  let ab = read-inline ctx {A} in
+  let (aw,ah,ad) = get-natural-metrics ab in
+  (read-inline ctx {L}) ++ 
+  (inline-skip (0pt -' (font-size *' 0.36))) ++
+  (inline-graphics (aw *' 0.7) (ah *' 0.7) (ad *' 0.7) (fun (x,y) -> ([
+     draw-text (0pt,0pt) ab
+     |> linear-transform-graphics 0.7 0.0 0.0 0.7
+     |> shift-graphics (x,y +' th -' (ah *' 0.7))
+  ]))) ++
+  (inline-skip (0pt -' (font-size *' 0.15))) ++
+  (read-inline ctx {\TeX;})
+
+
+let-inline \file f = {\code(f);}
