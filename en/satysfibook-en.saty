@@ -1,16 +1,29 @@
-@require: stdjabook
-@require: enumitem/enumitem
-@require: code
+%@require: stdjabook
 @import: satysfibook-en-cls
+@require: code
+@require: enumitem/enumitem
+@import: preface
 @import: getting-started
 
+
+
 document(|
-  title = {The \SATySFi; book};
-  author = {};
-  show-title = true;
-  show-toc = true;
+  title = {Unofficial translation of “The \SATySFi;book”};
+  author = {Takashi SUWA (original)};
+  preface = preface;
+%  bibliography = bibliography;
+  bibliography = [];
+%  top-page = Some(top-page);
+  top-page = None;
+  copyright-page = (|
+    title = {The \SATySFi;book（Web公開版 第1版）};
+    author = {Takashi SUWA\hskip(5cm);};
+    date = {2018年12月5日};
+    contact = {\url{gfngfn.bd\@gmail.com}};
+    printed-by = None;
+  |);
 |)'<
-  +section{A motivation to develope \SATySFi;}<
+  +chapter?:(`introduction`){A motivation to develope \SATySFi;}<
   >
-  +section{A quick introduction to \SATySFi;}<#getting-started;>
+  +chapter?:(`getting-started`){A quick introduction to \SATySFi;}<#getting-started;>
 >
