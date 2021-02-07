@@ -2,7 +2,7 @@
 @require: enumitem/enumitem
 @require: code
 @import: satysfibook-en-cls
-@import: 2
+@import: getting-started
 
 document(|
   title = {The \SATySFi; book};
@@ -12,6 +12,5 @@ document(|
 |)'<
   +section{A motivation to develope \SATySFi;}<
   >
-  +chap2;
-  
+  +section{A quick introduction to \SATySFi;}<#getting-started;>
 >
