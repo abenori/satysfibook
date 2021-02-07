@@ -92,7 +92,7 @@ let page-breaking = '<
     determined page contents until ${\paren{n - 1}} page,
     and pass a record
     \codem{(\| page-number = \meta{n}\; \|)}
-    to figure out separate contents of ${n} page from sequence of block-boxes left.
+    to seek a point of separate contents of ${n} page from sequence of block-boxes left.
     And the function returns value to page-breaking processing system below:
     \codem{(\| text-height = \meta{h}\; text-origin = (\meta{x}, \meta{y})\; \|)}
     The information contains below:
@@ -102,7 +102,7 @@ let page-breaking = '<
       * ${\tuple{|x|y|}}：\quad;
         Left-top coordinate to position contents actually separated. 
     }%
-    But, you should take care about difference between axis of Graphics; ${y} of ${\tuple{|x|y|}} at here is 
+    But, you should take care of difference between axis of Graphics; ${y} of ${\tuple{|x|y|}} at here is 
     a value based on an axis it is that having direction to bottom is ${+y}
     and left-top on paper as origin.
     If you want document pages as same format, having same length of texts from same point, on each pages,
@@ -110,4 +110,64 @@ let page-breaking = '<
     If you want change margins between left and right (general case is binding),
     you can set a function returns which value depends on ${n} is odd-or-even. 
   }
+  +p{
+    Similarly, I also refer to type \type(Type.(tymtausub ${3}));, 3rd argument of \codem{page-break} is like below:
+     \quote{
+      \type(Type.(
+        record [({page-number}, int)] -->
+          record [
+            ({header-content}, block-boxes);
+            ({header-origin}, point);
+            ({footer-content}, block-boxes);
+            ({footer-origin}, point);
+          ]
+      ));
+    }%
+    This is a type of function what receives record and returns record, like 2nd argument.
+    The function set 3rd argument of \codem{page-break} is called by being passed a record 
+    \codem{(\| page-number = \meta{n}\; \|)}
+    at time;
+    it has determined contents of ${n} th page and 
+    completed \it{hooking processing} in the page. 
+    
+      \d-codem{
+      (\|
+      \new-line;\quad;
+      header-content = \metasub(${1}){bb}\;
+      header-origin = (\metasub(${1}){x}, \metasub(${1}){y})\;
+      \new-line;\quad;
+      footer-content = \metasub(${2}){bb}\;
+      footer-origin = (\metasub(${2}){x}, \metasub(${2}){y})\;
+      \new-line;
+      \|)
+    }%
+    Then, the function returns record formated above.
+    The record has information shows below to page-breaking processing system.
+
+    \listing{
+      * Draw sequence of block-boxs ${bb_1} as header, it pointed ${\tuple{|x_1|y_1|}} as left-top.
+      * Draw sequence of block-boxs ${bb_2} as header, it pointed ${\tuple{|x_2|y_2|}} as left-top.
+    }%
+    Please take care of axis of value. It is as same as 2nd argument that described previous paragraph;
+    this axis has coordinate origin is left-top and direction ${+y} increase page bottom.
+    Only \codem{page-break}'s 2nd and 3rd arguments use this axis.
+  }
+  +p{
+    Above paragraphs are all specifications of primitive \codem{page-break}.
+    Let me appends a bit to them, it is about \it{At time line-breaking actually}.
+，  Correctly, \it{\codem{page-break} itself processes page-breaking} is not true,
+    but starting process page-breaking  at all of document being returned value
+    as type  \type(Type.document);
+    In other words, a value as type \type(Type.document); is
+    \it{frozen} information about finally page-breaking that is not being processed page-breaking actually. 
+    It means; there is no process doing page-break actually written having return-value as type  
+    \type(Type.document); without last one. 
+    Because there is no primitive arranging type \type(Type.document);, 
+    There is no reason to create a value as type \type(Type.document); by \codem{page-break} 
+    without returning contents to output PDF.
+    The reason was what causing \it{side-effect} at page-breaking not using return-value,
+    and you can not do it\footnote{
+      There is no reason you cannot do it.
+      If needed, it is sounds good to change the specification what imcompatible in future;
+      \it{\codem{page-break} itself processes apge-breaking}.}.}
 >
