@@ -4,13 +4,13 @@
 
 let getting-started = '<
   +p{
-    I explain basics of \SATySFi; based on “stdjareport” class which one can use just after the installing \SATySFi;.
+    I explain basics of \SATySFi; based on “stdjareport” class which you can use just after the installing \SATySFi;.
     If you have an experience to use \LaTeX; then you probably can easily guess the behaviros from expamples of codes.
     I will mention the big differences between \SATySFi; and \LaTeX; (with a markup with a usual class file).
   }
   +p{
     If you have no experience with \LaTeX; and especially if you are familiar with Markdown or reStructuredText, then you may thin “why such a redundancy code is needed”.
-    These are needed for the two reason: To detect possible errors before typesetting process, To enable uses to defined one's own commands.
+    These are needed for the two reason: To detect possible errors before typesetting process, To enable uses to defined your own commands.
     I hope users to understands such reasons.
   }
   +section{Type of files and extensions}<
@@ -52,7 +52,7 @@ author = {Type set};
       \d-code(`
 @require: <package name>
       `);
-      in the preamble, one can include the package file installed in the system.
+      in the preamble, you can include the package file installed in the system.
       The package is a file in which the source code is written.
       For example, the body if \pkg{stdjareport} is the file \path{.stdjareport.saty}.
       In the preamble, the name without the extension is written.
@@ -97,9 +97,9 @@ satysfi hello.saty
   >
   +section{Paragraphs}<
     +p{
-      The paragraphs are regarded as things which converts a series of strings to series of lines.
+      The paragraphs are regarded as what converts a line of strings to line of lines.
       This is formulated as a command whose argument is inline texts and which returns blocks.
-      As below, one can use \codem{+p} in block texts:
+      As below, you can use \codem{+p} in block texts:
     }
     +code(`
 +p{
@@ -146,7 +146,7 @@ contents
       `);
       in block texts.
       In this formulation, you should give not only as a chapter title but also contents of the chapter as a block text to the second argument.
-      The chapter title is an inline text because it is a series of strings.
+      The chapter title is an inline text because it is a line of strings.
       The contents is a block text because it is a series of paragraphs in the block direction.
       The usages of \codem{+section} and \codem{+section} are completely the same.
     }
@@ -164,8 +164,8 @@ contents
         }
       >
       Latin characters in the argument is output by italic characters.
-      Like this, an inline commands is a command which returns “a series of (possibly modified) strings”.
-      As one can see from the syntax of applications of commands, a semicolon is added for a command with no argument.
+      Like this, an inline commands is a command which returns “a line of (possibly modified) strings”.
+      As you can see from the syntax of applications of commands, a semicolon is added for a command with no argument.
       \d-code-and-block(`
 +p{ \SATySFi; is a new typesetting system.}
       `)<
@@ -209,6 +209,208 @@ contents
     }
     +p{
       More details of equations will be explained in chapter 10.
+    }
+  >
+  +section{Displayed equations}<
+    +p{
+      \d-code-and-block(```
+        +p{
+          The following code (it is slightly messy)
+          \eqn(${
+            \int_a^b \frac{\ordd x}{\sqrt{x^2 + 1}}
+              = \sqbracket{\log \paren{x + \sqrt{x^2 + 1}}}_a^b
+          });%
+          outputs displayed equation.
+          With the following code (it is more messy),
+          \align[
+            ${| \paren{x - a} \paren{x - b}
+                  |= x^2 - a x - b x + a b |};
+            ${|   |= x^2 - \paren{a + b} x + a b |};
+          ];%
+          you can output an aligned equation.
+        }
+      ```)(open Sample in '<
+        +p{
+          The following code (it is slightly messy)
+          \eqn(${
+            \int_a^b \frac{\ordd x}{\sqrt{x^2 + 1}}
+              = \sqbracket{\log \paren{x + \sqrt{x^2 + 1}}}_a^b
+          });%
+          outputs displayed equation.
+          With the following code (it is more messy),
+          \align[
+            ${| \paren{x - a} \paren{x - b}
+                  |= x^2 - a x - b x + a b |};
+            ${|   |= x^2 - \paren{a + b} x + a b |};
+          ];%
+          you can output an aligned equation.
+        }
+      >);%
+      The code \codem{[ ${\cdots} ]} in the argument of \codem{\\align} is an abbreviation of \codem{([ ${\cdots} ])}.
+      This argument \codem{[ ${\cdots} ]} with square brackets means a list\footnote{Note that this “list” is not related to a list in bullet points. I will explain this in \ref-chapter(`basic-command-definition`);}.
+    }
+  >
+  +section{Comment}<
+    +p{
+      A single line comment starts with \codem{\%} which is the same as \LaTeX;.
+      This is used not only for just a comment but also to make \SATySFi; ignore the new line code.
+      A multi line comment is not implemented now.
+      Because it is obviously useful, I will implement it in the near future.
+    }
+  >
+  +section{Bullet points}<
+    +p{
+      Bullet points can be used by loading the package \pkg{itemize}.
+      One way to use it is
+      \d-code(```
+        +listing{
+          * Tokyo
+            ** Hongo
+            ** Yayoi
+            ** Asano
+            ** Komaba
+          * Chiba
+            ** Kashiwa
+        }
+      ```);%
+      
+      in block texts.
+      Another way is to write
+
+      \d-code(```
+        \listing{
+          * Tokyo
+            （omission）
+            ** Kashiwa
+        }%
+      ```);%
+      
+      in inline texts
+      
+      Because bullet points are “things which lines in the block direction”, it is basically a “block”.
+      Due to markup convenience, an inline command version is also provided.
+      For an inline command version, a comment character \codem{\%} have to be added\footnote{Otherwise, unnecessary space comming from the new line code is added. I think it is subtle, so I am considering to improve this behavior.}.
+      As you can see from the examples, these command can treat multiple structures.
+      The level is determined by the number of the character \codem{\*}.
+      (Indents are inserted for making code easier to read.)
+      As I explained already, the character \codem{\*} is used as a special character for this function.
+      Hence to write is as a usual text, you need to escape it as \codem{\\\*}.
+    }
+    +p{
+      By the way, the part \codem{\{ ${\cdots} \}} in the above example is not an inline text.
+      This is a text with itemize type which is only for bullet points.
+      A usual inline text causes an error.
+      This will be explained in \ref-chapter(`basic-command-definition`);.
+    }
+  >
+  +section{Theorem environments}<
+    +p{
+      \pkg{stdjareport} provides environments for definitions, lemmas, theorems, corollaries and examples.
+      The commands are \codem{+definition}, \codem{+lemma}, \codem{+theorem}, \codem{+corollary} and \codem{+example}, respectively.
+      The usage of these environments are the same.
+      The easiest way is  to write
+      \d-code(```
+        +theorem{
+          (contents)
+        }
+      ```);
+      in block texts.
+      It is not expected to include a new line.
+      Contents are given by inline texts.
+      As an optional argument, title can be added.
+
+      \d-code-and-block(```
+        +theorem?:({Progress}){
+          If ${t} is a term with a type, one of the following holds.
+          \listing{
+            * ${t} is a blue.
+            * There exists a ${t'} such that ${t \to t'}.
+          }%
+        }
+      ```)<
+        +theorem?:({Progress}){
+          If ${t} is a term with a type, one of the following holds.
+          \listing{
+            * ${t} is a blue.
+            * There exists a ${t'} such that ${t \to t'}.
+          }%
+        }
+      >%
+
+      The syntax \codem{?:( ${\cdots} )} is a syntax for an optional argument.
+    }
+  >
+  +section{Footnote}<
+    +p{
+      One can insert footnotes as
+      \codem{\\footnote\{ ${\cdots} \}}
+      in inline texts.
+      This is almost the same as that of \LaTeX;
+      \codem{\\footnote} is not allowed in the argument of \codem{\\footnote}.
+    }
+  >
+  +section{Cross-referencing}<
+    +p{
+      As I explained in \ref-chapter(`introduction`);, cross-referencing is a function which markup typesetting systems can easily do.
+      \SATySFi; also has cross-referencing system and \pkg{stdjareport} uses this system to provide interfaces of cross-referencing.
+      Indeed, commands for sections, chapters and theorem environments which I have explained already accept labels for cross-referencing as optional arguments\footnote{Of course, passing a label for cross-referencing does not change the results of the typesetting.}.
+
+      \d-code(```
+        +chapter?:(`introduction`){Introduction}<
+          (omit)
+        >
+      ```);%
+
+      And you uses \codem{\\ref-chapter} in where you want to use the chapter number.
+
+      \d-code-and-block(```
+        +p{
+          As I explained in \ref-chapter(`introduction`);, cross-referencing is a function which markup typesetting systems can easily do.
+          (omit)
+        }
+      ```)<
+        +p{
+          As I explained in \ref-chapter(`introduction`);, cross-referencing is a function which markup typesetting systems can easily do.
+          (omit)
+        }
+      >%
+
+      One can pass a label for cross-referencing to a command for theorems as a second optional argument.
+
+      \d-code-and-block(```
+        +lemma?:({Preservation})?:(`preservation`){
+          If ${\Gamma \vdash t : \tau} and ${t \to t'}, then ${\Gamma \vdash t' : \tau} holds.
+        }
+      ```)<
+        +lemma?:({Preservation})?:(`preservation`){
+          If ${\Gamma \vdash t : \tau} and ${t \to t'}, then ${\Gamma \vdash t' : \tau} holds.
+        }
+      >%
+
+      To omit an optional argument and give an optional argument just after the omitted argument, you can use \codem{?\*} which means “a clarification of omitting”.
+      If you do not need a title of the lemma and you want to add a label for cross-referencing, change the above code as follows.
+
+      \d-code-and-block(```
+        +lemma?*?:(`preservation-without-title`){
+          If ${\Gamma \vdash t : \tau} and ${t \to t'}, then ${\Gamma \vdash t' : \tau} holds.
+        }
+      ```)<
+        +lemma?*?:(`preservation-without-title`){
+          If ${\Gamma \vdash t : \tau} and ${t \to t'}, then ${\Gamma \vdash t' : \tau} holds.
+        }
+      >%
+
+      To insert numbers, you uses \codem{\\ref-theorem}，\codem{\\ref-lemma},...
+
+      \d-code-and-block(```
+        +proof{
+          It follows from \ref-lemma(`preservation`); immediately.
+        }
+      ```)<
+        +proof{
+          It follows from \ref-lemma(`preservation`); immediately.
+        }
+      >%
     }
   >
 >
