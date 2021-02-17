@@ -9,8 +9,8 @@ let getting-started = '<
     I will mention the big differences between \SATySFi; and \LaTeX; (with a markup with a usual class file).
   }
   +p{
-    If you have no experience with \LaTeX; and especially if you are familiar with Markdown or reStructuredText, then you may thin “why such a redundancy code is needed”.
-    These are needed for the two reason: To detect possible errors before typesetting process, To enable uses to defined your own commands.
+    If you have no experience with \LaTeX; and especially if you are familiar with Markdown or reStructuredText, then you may think “why such a redundancy code is needed”.
+    These are needed for the two reason: To detect possible errors before typesetting process, To enable users to define thier own commands.
     I hope users to understands such reasons.
   }
   +section{Type of files and extensions}<
@@ -20,8 +20,8 @@ let getting-started = '<
         * Document file: The file with contents of documents.
         * Package file(s): Files with the definitions of commands.
       }
-      There is also a special package file which describes how to mark up a document file.
-      Such package file is called \emph{class file}.
+      There are also special package files which specifies how to mark up the entire document file.
+      Such package files are called \emph{class files}.
       Th extension of a package file must be \path{.satyh} \footnote{An extension \path{.satyg} is also used. At this point it is enough if you know en extension \path{.satyh} The details are explaind when I explain a text mode.}.
       There is not rule for an extension of a document file, but usually \path{.saty} is used.
       I strongly recommend to use the extension \path{.saty} if you have no special reason.
@@ -39,29 +39,34 @@ author = {Type set};
 |) '<
 +chapter{First chapter}<
   +p{
-    This is the first paragraph by \SATySFi;
-    Paragraphs are marked with \defn{block command}.
+    This is the first paragraph by \SATySFi;.
+    Paragraphs are marked with \defn{block commands}.
   }
 >
 >
     `);
     +p{
-       Indents have no meaning when parsing, so you can do it as you want\footnote{Of course, customary I recommend to add indents according to the levels of nests.}.
-       Let us call \emph{preamble} the part before \codem{document} in the document file following \LaTeX;
+       Indents have no meaning when parsing, so you can insert them as you want\footnote{Of course, customary I recommend to add indents according to the levels of nest of parenthesis.}.
+       According to \LaTeX;. the part before \codem{document} in the odument file is called \emph{preamble} for convenience.
        By writing 
       \d-code(`
 @require: <package name>
       `);
-      in the preamble, you can include the package file installed in the system.
+      in the preamble, you can include the package file installed in your system.
       The package is a file in which the source code is written.
-      For example, the body if \pkg{stdjareport} is the file \path{.stdjareport.saty}.
+      For example, the body of \pkg{stdjareport} is the file \path{.stdjareport.saty}.
       In the preamble, the name without the extension is written.
       (\path{.satyh} is automatically added.)
-      (“Local”) Package files in the directory which the document file can be loaded with
+      % 分割ファイル
+      (“Local”) Package files in the directory where the document file is can be loaded with
       \d-code(`
 @import: <The relative path to the file>
       `);
       Similar to the above, the extension is automatically added, hence it is not written.
+      \footnote{The mechanism to omit the extension in \codem{\@require} \codem{\@import} exists not only for saving the time.
+      An extension completed is not necessary \path{.satyh}.
+      I will explain this later in the explanation of the text mode in \ref-chapter(`future-work`);.
+      }
     }
     +p{
       You add necessary information like title and authors in \codem{(\| ${\cdots} \|)} and write a document itself in \codem{'\< ${\cdots} \>}.
