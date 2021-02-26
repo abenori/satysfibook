@@ -177,7 +177,7 @@ end = struct
     let key-num = `chapter:` ^ key ^ `:num` in
     let opt = get-cross-reference key-num in
     let it = embed-string (Option.from `?` opt) in
-      goto-frame key-pdf-loc (read-inline ctx {第#it;章})
+      goto-frame key-pdf-loc (read-inline ctx {Chapter #it;})
 
 
   let-inline ctx \ref-section key =
@@ -185,7 +185,7 @@ end = struct
     let key-num = `section:` ^ key ^ `:num` in
     let opt = get-cross-reference key-num in
     let it = embed-string (Option.from `?` opt) in
-      goto-frame key-pdf-loc (read-inline ctx {#it;節})
+      goto-frame key-pdf-loc (read-inline ctx {Section #it;})
 
 
   let-inline ctx \ref-subsection key =
@@ -193,19 +193,19 @@ end = struct
     let key-num = `subsection:` ^ key ^ `:num` in
     let opt = get-cross-reference key-num in
     let it = embed-string (Option.from `?` opt) in
-      goto-frame key-pdf-loc (read-inline ctx {#it;節})
+      goto-frame key-pdf-loc (read-inline ctx {Section #it;})
 
 
   let-inline ctx \ref-figure key =
     let opt = get-cross-reference (`figure:` ^ key ^ `:num`) in
     let it = embed-string (Option.from `?` opt) in
-      read-inline ctx {図#it;}
+      read-inline ctx {Figure #it;}
 
 
   let-inline ctx \ref-table key =
     let opt = get-cross-reference (`table:` ^ key ^ `:num`) in
     let it = embed-string (Option.from `?` opt) in
-      read-inline ctx {表#it;}
+      read-inline ctx {Table #it;}
 
 
   let-mutable index-list <- []
