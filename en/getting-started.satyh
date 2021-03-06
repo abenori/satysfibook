@@ -4,13 +4,13 @@
 
 let getting-started = '<
   +p{
-    I explain basics of \SATySFi; based on “stdjareport” class which one can use just after the installing \SATySFi;.
+    I explain basics of \SATySFi; based on “stdjareport” class which you can use just after the installing \SATySFi;.
     If you have an experience to use \LaTeX; then you probably can easily guess the behaviros from expamples of codes.
     I will mention the big differences between \SATySFi; and \LaTeX; (with a markup with a usual class file).
   }
   +p{
-    If you have no experience with \LaTeX; and especially if you are familiar with Markdown or reStructuredText, then you may thin “why such a redundancy code is needed”.
-    These are needed for the two reason: To detect possible errors before typesetting process, To enable uses to defined one's own commands.
+    If you have no experience with \LaTeX; and especially if you are familiar with Markdown or reStructuredText, then you may think “why such a redundancy code is needed”.
+    These are needed for the two reason: To detect possible errors before typesetting process, To enable users to define thier own commands.
     I hope users to understands such reasons.
   }
   +section{Type of files and extensions}<
@@ -20,11 +20,11 @@ let getting-started = '<
         * Document file: The file with contents of documents.
         * Package file(s): Files with the definitions of commands.
       }
-      There is also a special package file which describes how to mark up a document file.
-      Such package file is called \emph{class file}.
+      There are also special package files which specifies how to mark up the entire document file.
+      Such package files are called \emph{class files}.
       Th extension of a package file must be \path{.satyh} \footnote{An extension \path{.satyg} is also used. At this point it is enough if you know en extension \path{.satyh} The details are explaind when I explain a text mode.}.
-      There is not rule for an extension of a document file, but usually \code(`.saty`); is used.
-      I strongly recommend to use the extension \code(`.saty`); if you have no special reason.
+      There is not rule for an extension of a document file, but usually \path{.saty} is used.
+      I strongly recommend to use the extension \path{.saty} if you have no special reason.
     }
   >
   +section{A structure of a document}<
@@ -39,32 +39,36 @@ author = {Type set};
 |) '<
 +chapter{First chapter}<
   +p{
-    This is the first paragraph by \SATySFi;
-    Paragraphs are marked with \defn{block command}.
+    This is the first paragraph by \SATySFi;.
+    Paragraphs are marked with \defn{block commands}.
   }
 >
 >
     `);
     +p{
-       Indents have no meaning with parsing, so you can do it as you want\footnote{Of course, customary I recommend to add indents according to the levels of nests.}.
-       Let us call \emph{preamble} the part before \code(`document`); in the document file following \LaTeX;
+       Indents have no meaning when parsing, so you can insert them as you want\footnote{Of course, customary I recommend to add indents according to the levels of nest of parenthesis.}.
+       According to \LaTeX;. the part before \codem{document} in the odument file is called \emph{preamble} for convenience.
        By writing 
       \d-code(`
 @require: <package name>
       `);
-      in the preamble, one can include the package file installed in the system.
+      in the preamble, you can include the package file installed in your system.
       The package is a file in which the source code is written.
-      For example, the body if \pkg{stdjareport} is the file \path{.stdjareport.saty}.
+      For example, the body of \pkg{stdjareport} is the file \path{stdjareport.saty}.
       In the preamble, the name without the extension is written.
-      (\code(`.satyh`); is automatically added.)
-      (“Local”) Package files in the directory which the document file can be loaded with
+      (\path{.satyh} is automatically added.)
+      % 分割ファイル
+      (“Local”) Package files in the directory where the document file is can be loaded with
       \d-code(`
 @import: <The relative path to the file>
       `);
-      Similar to the above, the extension is automatically added, hence it is not written.
+      Similar to the above, the extension is automatically added, hence it is not written\footnote{The mechanism to omit the extension in \codem{\@require} and \codem{\@import} exists not only for saving the time.
+      An extension completed is not necessary \path{.satyh}.
+      I will explain this later in the explanation of the text mode in \ref-chapter(`future-work`);.
+      }.
     }
     +p{
-      You add necessary information like title and authors in \code(`(|...|)`); and write a document itself in \code(`'<...>`);.
+      You add necessary information like title and authors in \codem{(\| ${\cdots} \|)} and write a document itself in \codem{'\< ${\cdots} \>}.
       This formalism is the same as those in class files located in \path{lib-satysfi/dist/package/} in the GitHub repository, like \path{stdjabook} class.
       The contents of a document file is mainly divided into the following two parts:
       \listing{
@@ -72,34 +76,35 @@ author = {Type set};
         * inline text: things in inline directions.
       }
       The inline texts are the parts which users write texts as usual strings.
-      Block texts are written in \code(`<...>`); and inline texts are written in \code(`{...}`);
-      Note that you have to use \code(`'<`); instead of \code(`<`); as the beginning of the block text of all document as in the  above code.
-      By using the notion in \TeX;, block texts correspond to things in vertical modes and inline texts correspond to things in horizontal modes.
+      Block texts are written in \codem{\< ${\cdots} \>} and inline texts are written in \codem{\{ ${\cdots} \}}.%%%%%%%%%%%
+      Note that, as in the above code, you have to use \codem{'\<} instead of \codem{\<} at the beginning of the block text of all document.\footnote{Because the lexial analysis rules are changed before and after this bracket, when you write a block text at the place which “is not an argument of a command”, you have to use \codem{'\<}, not \codem{\<}. If you write simply \codem{\<}, then it is regarded as the binary operator of inequality. I skip the details.}
+      In the concepts in \TeX;, roughly, block texts correspond to things in vertical modes and inline texts correspond to things in horizontal modes.
     }
     +p{
       Let us generated the PDF file from the above example.
       First you have to save the above document file in a directory.
-      Assume that the name of the file is \code(`hello.saty`);
-      Open the terminal, moving the directory which \code(`hello.saty`); is, and execute
+      Assume that the name of the file is \path{hello.saty}.
+      Open the terminal, move the directory which \path{hello.saty} is, and execute
       \d-code(`
 satysfi hello.saty
       `);
-      If you have no error in the document file, the file \path{hello.satysfi-aux} and \code(`hello.pdf`); should be generated.
+      If you have no error in the document file, the file \path{hello.satysfi-aux} and \path{hello.pdf} will be generated.
       The file \path{hello.satysfi-aux} is called \emph{auxiliary file}.
       You may ignore this file here.
       The file \path{hello.pdf} is the file we need.
       You can confirm a small document is generated in this file by opening this file.
     }
     +p{
-      In the above example, there are some examples like \code(`+chapter{...}<...>`);, \code(`+p{...}`); and \code(`dfn{...}`);, which maybe you can guess what they are but in which many symbols are used.\footnote{Just in case, commands as \code(`+chapter`); and \code(`+p`); are defined in \path{stdjaporet} and they are are not implemented in \SATySFi; itself. You can read the class file \path{stdjareport.satyh} by opening this file if you want.}
+      In the above example, there is a suspicious description in which strangely many symbols like \codem{+chapter\{${\cdots}\}\<${\cdots}\>}, \codem{+p\{ ${\cdots} \}} and \codem{\\dfn\{ ${\cdots} \}} which perhaps you can guess what they are are used%%%%%%%%%%%
+      \footnote{Just in case, commands as \codem{+chapter} and \codem{+p} are defined in \pkg{stdjaporet} and they are are not implemented in \SATySFi; itself. You can read the class file \path{stdjareport.satyh} by opening this file if you want.}.
       I will explain such commands in the following sections.
     }
   >
   +section{Paragraphs}<
     +p{
-      The paragraphs are regarded as things which converts a list of strings to list of lines.
+      The paragraphs are regarded as what converts a line of strings to a list of lines.%%%%%%%%%%%%%
       This is formulated as a command whose argument is inline texts and which returns blocks.
-      As below, one can use \code(`+p`); in block texts:
+      As below, you can use \codem{+p} in block texts:
     }
     +code(`
 +p{
@@ -109,11 +114,11 @@ Tomorrow is another day.
     +p{
       Things which I wrote “blocks” is not really “block texts”, but at this point it is safe to think them as somethings similar to block texts.
       A command used in block texts, namely a command which “returns blocks” starts with \code(`+`); and is called a \emph{block command}.
-      A command used in inline texts starts with \code(`\`); (like \LaTeX;) and is called a \emph{inline text}.
+      A command used in inline texts starts with \code(`\`); (as in \LaTeX;) and is called a \emph{inline text} (will be explained later).
       The second letter of both commands should be a latin character and the others should be a latin character, a number, or hyphen.
     }
     +p{
-      There are three types of arguments for commands:
+      There are three types of arguments for commands:\footnote{In expression arguments, there is a variant which is not of form \codem{( ${\cdots} )}. You can simply write \codem{[ ${\cdots} ]} or \codem{(\| ${\cdots} \|)} instead of \codem{([ ${\cdots} ])} and \codem{((\| ${\cdots} \|))}. You can ignore such details here.}%%%%%%%%%%%%%
       \listing{
         * \code(`(...)`);: expression arguments.
         * \code(`{...}`);: inline arguments.
@@ -136,7 +141,7 @@ Tomorrow is another day.
   >
   +section{Chapters, sections}<
     +p{
-      You use \code(`+chapter`);, \code(`+section`); and \code(`+section`);
+      You use \codem{+chapter}, \codem{+section} and \codem{+section}.
       The names of commands follows those of \LaTeX; but the usage is little different.
       These commands are used as
       \d-code(`
@@ -145,27 +150,27 @@ contents
 >
       `);
       in block texts.
-      In this formulation, you should give not only as a chapter title but also contents of the chapter as a block text to the second argument.
-      The chapter title is an inline text because it is a list of strings.
-      The contents is a block text because it is a list of paragraphs in the block direction.
-      The usages of \code(`+section`); and \code(`+section`); are completely the same.
+      In this formulation, you should give not only a chapter title but also contents of the chapter as a block text to the second argument.
+      The chapter title is an inline text because it is a line of strings.
+      The contents is a block text because it is a series of paragraphs in the block direction.
+      The usages of \codem{+section} and \codem{+section} are completely the same.
     }
   >
   +section{New words}<
     +p{
-      One uses \code(`\defn`); to a name etc. defined first in a document as follows.
+      One uses \codem{\\defn} to a name etc. defined first in a document as follows.
       \d-code-and-block(`
 +p{
   Arranging fonts and pictures following a manuscript and a design and make printed pages are called \dfn{typsettings}.
 }
       `)<
-        +p{
+        +p{%%%%%%%%%%%%%%
           Arranging fonts and pictures following a manuscript and a design and make printed pages are called \dfn{typsettings}.
         }
       >
       Latin characters in the argument is output by italic characters.
-      Like this, an inline commands is a command which returns “a list of (possibly modified) strings”.
-      As one can see from the syntax of applications of commands, a semicolon is added for a command with no argument.
+      Like this, an inline commands is a command which returns “a line of (possibly processed) strings”.
+      As you can see from the syntax of applications of commands, a semicolon is added for a command with no argument.
       \d-code-and-block(`
 +p{ \SATySFi; is a new typesetting system.}
       `)<
@@ -177,9 +182,9 @@ contents
   >
   +section{Inline equations}<
     +p{
-      Inline equations is written in \code(`${...}`); in inline texts.
+      Inline equations is written in \codem{\$\{ ${\cdots} \}} in inline texts.
       The syntax is very similar to that of \LaTeX;
-      In the following example, the contents inside \code(`${...}`); is the same as that of \LaTeX;
+      In the following example, the contents inside \codem{\$\{ ${\cdots} \}} is the same as that of \LaTeX;
       \d-code-and-block(`
 +p{
   Equations can be written as ${E = mc^2}, ${F = G\frac{m_1 m_2}{r^2}}, ${x^x = e^{x \log x}}, like \LaTeX;}
@@ -189,26 +194,228 @@ contents
           Equations can be written as ${E = mc^2}, ${F = G\frac{m_1 m_2}{r^2}}, ${x^x = e^{x \log x}}, like \LaTeX;
         }
       >
-      Math commands which are commands in equations start with \code(`\`); which is the same as inline commands.
+      Math commands which are commands in equations start with \codem{\\} which is the same as inline commands.
       You can not use the same name for a math command and an inline command.
       (Namely the name space is not separated.)
-      Unlike the case of inline commands, \code(`;`); is not needed for the application of a math commands with no argument.
+      Unlike the case of inline commands, \codem{\;} is not needed for the application of a math commands with no argument.
     }
     +p{
       Even though the syntax is similar to that of \LaTeX;, there are some differences.
       Especially how to write parentheses are very different from \LaTeX;
       There is nothing corresponding to \code(`\left`);, \code(`\right`); and \code(`\middle`);.
       Instead of this, a one command provides both open and close parentheses.
-      If you want to use parentheses, use \code(`\paren{equation}`);
-      One can use \code(`\set{...}`); for .... and \code(`\setsep{...}{...}`); for a set-builder notation, \code(`\abs{...}`); for absolute values, \code(`\dist{...}`); for two line brackes used for distance or norm.
-      An application of a function can be written as \code(`\app{f}{x}`);
+      If you want to use parentheses, use \codem{\\paren\{ (equation) \}}.
+      One can use \codem{\\set\{ ${\cdots} \}} for 集合の外延記法 and \codem{\\setsep\{ ${\cdots} \}\{ ${\cdots} \}} for a set-builder notation, \codem{\\abs\{ ${\cdots} \}} for absolute values, \codem{\\dist\{ ${\cdots} \}} for two line brackes used for distance or norm.
+      An application of a function can be written as \codem{\\app\{f\}\{x\}}.
     }
     +p{
-      Square brackets, curly brackets (which is not necessary for set notation), triangle brackets are provided by \code(`\sqbracket{...}`);, \code(`\brace{...}`); and \code(`\angle-bracket{...}`);, respectively.
-      Because these commands does not point their “meanings”, it is supposed to not used in equations directly but used in commands defined by users (explained later)\footnote{However, in the next subsection, \code(`\sqbracket`); in equation will be appeared...}.
+      Square brackets, curly brackets (which is not necessary for set notation), triangle brackets are provided by \codem{\\sqbracket\{ ${\cdots} \}}, \codem{\\brace\{ ${\cdots} \}} and \codem{\\angle-bracket\{ ${\cdots} \}}, respectively.
+      Because these commands does not point their “meanings”, it is supposed to not used in equations directly but used in commands defined by users (explained later)\footnote{However, in the next subsection, \codem{\\sqbracket} in equation will appear.}.
     }
     +p{
-      More details of equations will be explained in chapter 10.
+      More details of equations will be explained in chapter \ref-chapter(`math`);.
+    }
+  >
+  +section{Displayed equations}<
+    +p{
+      \d-code-and-block(```
+        +p{
+          The following code (it is slightly messy)
+          \eqn(${
+            \int_a^b \frac{\ordd x}{\sqrt{x^2 + 1}}
+              = \sqbracket{\log \paren{x + \sqrt{x^2 + 1}}}_a^b
+          });%
+          outputs displayed equation.
+          With the following code (it is more messy),
+          \align[
+            ${| \paren{x - a} \paren{x - b}
+                  |= x^2 - a x - b x + a b |};
+            ${|   |= x^2 - \paren{a + b} x + a b |};
+          ];%
+          you can output an aligned equation.
+        }
+      ```)(open Sample in '<
+        +p{
+          The following code (it is slightly messy)
+          \eqn(${
+            \int_a^b \frac{\ordd x}{\sqrt{x^2 + 1}}
+              = \sqbracket{\log \paren{x + \sqrt{x^2 + 1}}}_a^b
+          });%
+          outputs displayed equation.
+          With the following code (it is more messy),
+          \align[
+            ${| \paren{x - a} \paren{x - b}
+                  |= x^2 - a x - b x + a b |};
+            ${|   |= x^2 - \paren{a + b} x + a b |};
+          ];%
+          you can output an aligned equation.
+        }
+      >);%
+      The code \codem{[ ${\cdots} ]} in the argument of \codem{\\align} is an abbreviation of \codem{([ ${\cdots} ])}.
+      This argument \codem{[ ${\cdots} ]} with square brackets means a list\footnote{Note that this “list” is not related to a list in bullet points. I will explain this in \ref-chapter(`basic-command-definition`);}.
+    }
+  >
+  +section{Comment}<
+    +p{
+      A single line comment starts with \codem{\%} which is the same as \LaTeX;.
+      This is used not only for just a comment but also to make \SATySFi; ignore the new line code.
+      A multi line comment is not implemented now.
+      Because it is obviously useful, I will implement it in the near future.
+    }
+  >
+  +section{Bullet points}<
+    +p{
+      Bullet points can be used by loading the package \pkg{itemize}.
+      One way to use it is
+      \d-code(```
+        +listing{
+          * Tokyo
+            ** Hongo
+            ** Yayoi
+            ** Asano
+            ** Komaba
+          * Chiba
+            ** Kashiwa
+        }
+      ```);%
+      
+      in block texts.
+      Another way is to write
+
+      \d-code(```
+        \listing{
+          * Tokyo
+            （omission）
+            ** Kashiwa
+        }%
+      ```);%
+      
+      in inline texts
+      
+      Because bullet points are “things which lines in the block direction”, it is basically a “block”.
+      Due to markup convenience, an inline command version is also provided.
+      For an inline command version, a comment character \codem{\%} have to be added\footnote{Otherwise, unnecessary space comming from the new line code is added. I think it is subtle, so I am considering to improve this behavior.}.
+      As you can see from the examples, these command can treat nested structures.
+      The level is determined by the number of the character \codem{\*}.%%%%%%%%%%%%%%%
+      (Indents are inserted for making code easier to read.)
+      As I explained already, the character \codem{\*} is used as a special character for this function.
+      Hence to write it as a usual text, you need to escape it as \codem{\\\*}.
+    }
+    +p{
+      By the way, the part \codem{\{ ${\cdots} \}} in the above example is not an inline text.
+      This is a text with itemize type which is only for bullet points.
+      A usual inline text causes an error.
+      This will be explained in \ref-chapter(`basic-command-definition`);.
+    }
+  >
+  +section{Theorem environments}<
+    +p{
+      \pkg{stdjareport} provides environments for definitions, lemmas, theorems, corollaries and examples.
+      The commands are \codem{+definition}, \codem{+lemma}, \codem{+theorem}, \codem{+corollary} and \codem{+example}, respectively.
+      The usage of these environments are the same.
+      The easiest way is to write
+      \d-code(```
+        +theorem{
+          (contents)
+        }
+      ```);
+      in block texts.
+      It is not supposed to include a new line.
+      Contents are given by inline texts.
+      As an optional argument, title can be added.
+
+      \d-code-and-block(```
+        +theorem?:({Progress}){
+          If ${t} is a term with a type, one of the following holds.
+          \listing{
+            * The term ${t} is a value.
+            * There exists a ${t'} such that ${t \to t'}.
+          }%
+        }
+      ```)<
+        +theorem?:({Progress}){
+          If ${t} is a term with a type, one of the following holds.
+          \listing{
+            * The term ${t} is a value.
+            * There exists a ${t'} such that ${t \to t'}.
+          }%
+        }
+      >%
+
+      The syntax \codem{?:( ${\cdots} )} is a syntax for an optional argument.
+    }
+  >
+  +section{Footnote}<
+    +p{
+      One can insert footnotes as
+      \codem{\\footnote\{ ${\cdots} \}}
+      in inline texts.
+      This is almost the same as that of \LaTeX;.
+      \codem{\\footnote} is not allowed in the argument of \codem{\\footnote}.
+    }
+  >
+  +section{Cross-referencing}<
+    +p{
+      As I explained in \ref-chapter(`introduction`);, cross-referencing is a function which markup typesetting systems can easily do.
+      \SATySFi; also has cross-referencing system and \pkg{stdjareport} uses this system to provide interfaces of cross-referencing.
+      Indeed, commands for sections, chapters and theorem environments which I have explained already accept labels for cross-referencing as optional arguments\footnote{Of course, passing a label for cross-referencing does not change the results of the typesetting.}.
+
+      \d-code(```
+        +chapter?:(`introduction`){Introduction}<
+          (omit)
+        >
+      ```);%
+
+      And you uses \codem{\\ref-chapter} in where you want to use the chapter number.
+
+      \d-code-and-block(```
+        +p{
+          As I explained in \ref-chapter(`introduction`);, cross-referencing is a function which markup typesetting systems can easily do.
+          (omit)
+        }
+      ```)<
+        +p{
+          As I explained in \ref-chapter(`introduction`);, cross-referencing is a function which markup typesetting systems can easily do.
+          (omit)
+        }
+      >%
+
+      One can pass a label for cross-referencing to a command for theorems as a second optional argument.
+
+      \d-code-and-block(```
+        +lemma?:({Preservation})?:(`preservation`){
+          If ${\Gamma \vdash t : \tau} and ${t \to t'}, then ${\Gamma \vdash t' : \tau} holds.
+        }
+      ```)<
+        +lemma?:({Preservation})?:(`preservation`){
+          If ${\Gamma \vdash t : \tau} and ${t \to t'}, then ${\Gamma \vdash t' : \tau} holds.
+        }
+      >%
+
+      To omit an optional argument and give an optional argument just after the omitted argument, you can use \codem{?\*} which means “a clarification of omitting”.
+      If you do not need a title of the lemma and you want to add a label for cross-referencing, change the above code as follows.
+
+      \d-code-and-block(```
+        +lemma?*?:(`preservation-without-title`){
+          If ${\Gamma \vdash t : \tau} and ${t \to t'}, then ${\Gamma \vdash t' : \tau} holds.
+        }
+      ```)<
+        +lemma?*?:(`preservation-without-title`){
+          If ${\Gamma \vdash t : \tau} and ${t \to t'}, then ${\Gamma \vdash t' : \tau} holds.
+        }
+      >%
+
+      To insert numbers, you uses \codem{\\ref-theorem}，\codem{\\ref-lemma},...
+
+      \d-code-and-block(```
+        +proof{
+          It follows from \ref-lemma(`preservation`); immediately.
+        }
+      ```)<
+        +proof{
+          It follows from \ref-lemma(`preservation`); immediately.
+        }
+      >%
     }
   >
 >
