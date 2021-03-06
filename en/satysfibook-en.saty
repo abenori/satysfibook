@@ -26,30 +26,22 @@ document(|
   +chapter?:(`introduction`){A motivation to develope \SATySFi;}<
   >
   +chapter?:(`getting-started`){A quick introduction to \SATySFi;}<#getting-started;>
-  +chapter?:(`basic-command-definition`){コマンド定義：基礎編}<
+  +chapter?:(`basic-command-definition`){Command definitions: basics}<
     +p{
-      \ref-chapter(`getting-started`);で\pkg{stdjareport}を用いて
-      \SATySFi;の基礎的なコマンドの用法を知った．
-      ところで，マークアップ言語の大きな強みのひとつは
-      自前でコマンドを定義することによって
-      種々の自動処理を実現したり独自の意味マークアップを規定したりできる点にあったはずである．
-      実際，\codem{+chapter}とか\codem{+p}とか\codem{\\dfn}とかいった
-      コマンドたちは単に\pkg{stdjareport}クラスによって定義が提供されているだけであり，
-      その気になればユーザでも同様の定義を書いたりできるはずだ．
-      そろそろ自前でコマンドを定義したくてうずうずしている読者も多いかと思う．
-      この章では，コマンド定義のごく基礎的な方法を紹介する．
-      あらかじめ言ってしまうとここでの説明はとてもアドホックなものになっており，
-      \SATySFi;をよく理解されたのちにこの章を読めば
-      「こんな子供騙しな説明をしていたのか」と驚かれるかもしれないが，
-      読者の様々なバックグラウンドを鑑み，
-      まず最初の一歩としておおまかに把握してもらうには良い説明だろうと
-      判断してのことなのでご容赦願いたいと思う．
-      より深い理解を獲得し，より柔軟で幅広い種類の処理をコマンドとして定義するには，
-      \ref-chapter(`overall-structure`);で
-      \SATySFi;が行なっている組版処理の全体像を把握した上で
-      \ref-chapter(`advanced-command-definition`);に臨んでいただきたい．
+      In \ref-chapter(`getting-started`);, I explained the usages of basic command of \SATySFi; using \pkg{stdjareport}.
+      By the way, one of big advantages of markup languages is, by defining commands by yourself, you can do many things automatically or you can define a new descriptive markup.
+      In fact, commands such as \codem{+chapter}, \codem{+p} and \codem{\\dfn} are simply provided by \pkg{stdjareport}.
+      Users can define a similar definitions if they want.
+      I think that now many readers can't wait to define commands by themselves.
+      In this chapter, I will explain a basic way to define commands.
+      To say in advance, the explanations here is very ad-hoc.
+      If you read this chapter after learning \SATySFi; well, you may be surprised by such explanations like a children trick.
+      I thought, as I took care of various backgrounds of readers, such a rough explanation probably worth as a first step.
+      So please forgive me.
+      To get deeper understanding and define more flexible commands with more various functions, you need to first get a big picture of typesetting procedure done by \SATySFi;.
+      After that please read \ref-chapter(`advanced-command-definition`);.
     }
-    +section{簡単なエイリアス}< #alias-command-definition; >
+    +section{Simple aliases}< #alias-command-definition; >
 %    +section{プログラミング言語としての\SATySFi;}< #programming; >
   >
 

@@ -3,117 +3,105 @@
 
 let alias-command-definition = '<
   +p{
-    まずは非常に簡素な例から考える．
-    例えば\pkg{stdjareport}の提供する\codem{\\dfn}というコマンド名が気に入らず，
-    \codem{\\new-word}という名前で書きたいとしよう．
-    要するに，\codem{\\new-word\{（新出単語）\}}と書いたら\codem{\\dfn\{（新出単語）\}}
-    に “勝手に変わってくれる” ようなコマンド\codem{\\new-word}を定義したいとする．
+    Let us start with a very simple example.
+    Assume that, for example, you do not like the name of the command \codem{\\dfn} provided by \pkg{stdjareport} and you want to use the name \codem{\\new-word}.
+    Namely, you want to define a new command \codem{\\new-word} which “automatically changes”\codem{\\new-word\{(new word)\}} to \codem{\\dfn\{(new word)\}}
   }
   +p{
-    これを実現するために，プリアンブルに手を加えよう．文書ファイルの
-    \codem{\@require}や\codem{\@import}が並ぶ箇所と\codem{document}との間には，
-    コマンド定義を書くことができる．
-    \ref-chapter(`getting-started`);で扱った例の
-    本文中の\codem{\\dfn}を\codem{\\new-word}に書き換え，
-    \codem{\\new-word}の定義をプリアンブルに追加してみよう：
+    To realize this, let us modify the preamble.
+    Between \codem{document} and the place where \codem{\@require} and \codem{\@import} are, you can write the definition of commands.
+    Change \codem{\\dfn} (appeard in \ref-chapter(`getting-started`);) in documents  and add the definition of \codem{\\new-word} in the preamble as follows.
 
     \d-code(```
-      @require: stdjareport
+@require: stdjareport
 
-      let-inline \new-word it =
-        {\dfn{#it;}}
+let-inline \new-word it =
+  {\dfn{#it;}}
 
-      in
-      document (|
-        title = {サンプル文書};
-        author = {組 版太郎};
-      |) '<
-        +chapter{はじめての章}<
-          +p{
-            \SATySFi;でのはじめての段落の記述です．
-            段落は\new-word{ブロックコマンド}で実現されています．
-          }
-        >
-      >
+in
+document (|
+title = {An example};
+author = {Type set};
+|) '<
++chapter{First chapter}<
+  +p{
+    This is the first paragraph by \SATySFi;
+    Paragraphs are marked with \new-word{block command}.
+  }
+>
     ```);
 
-    \codem{let-inline}云々とあるのが\codem{\\new-word}の定義である．
-    コマンドの定義はプログラミング言語で言うところの函数の定義によく似ており，
-    \codem{it}がインラインテキストが格納される引数にあたる．
-    そして受け取った引数をインラインテキスト中で使っているのが\codem{\#it\;}である．
-    コマンド定義は
+    \codem{let-inline} etc. is the definition of \codem{\\new-word}.
+    The definition of a command is very similar to the definition of a function in programming languages.
+    \codem{it} is the argument which stores inline texts.%%%%%%%%%%%%
+    And by \codem{\#it\;}, you can use the argument received in inline texts.
+    You can write the definition of a command as
 
     \d-code(```
-      let-inline （定義したいインラインコマンド名） （0個以上の引数） =
-        {（置き換え後の記述）}
+      let-inline (the name of the inline command you want to define) (arguments) =
+        {(description after replacing)}
     ```);%
 
-    という形で書くことになる．
-    おそらく中級以上の\LaTeX;ユーザなら\code(`\newcommand`);を想起するだろう．
-    実際，\SATySFi;での上記のような\codem{\\new-word}の定義は，
-    \code(`\dfn`);が定義されている下で\code(`\newWord`);を定義する
-    以下の\LaTeX;コードとほぼ等価なものと考えてよい．
+    If you are an intermediate or above \LaTeX; user, then you may remember \code(`\newcommand`);.
+    In fact, the definition of a command like \codem{\\new-word} in \SATySFi; is almost similar to the following \LaTeX; code which defines \code(`\newWord`);, assuming \code(`\dfn`); is defined.
 
     \d-code(```
       \newcommand{\newWord}[1]{\dfn{#1}}
     ```);
 
-    この定義中の\code(`#1`);が\SATySFi;での\codem{\#it\;}に相当するのである．
-    引数を要しないコマンドも同様に定義できる．例えば
+    \code(`#1`); in this definition corresponds to \codem{\#it\;} in \SATySFi;.
+    You can also define a command which has no argument.
+    For example, if you defined as
 
     \d-code(```
       let-inline \Cde =
-        {ともあれ，カルタゴは滅ぶべきであると考える次第である．}
+        {Furthermore, I consider that Carthage must be destroyed}
     ```);
-
-    と定義すれば，インラインテキスト中で \codem{\\Cde\;}と打つだけで
-    「ともあれ，カルタゴは滅ぶべきであると考える次第である．」と書いているのと等価になってくれる．
-    日本語を読み書きできる古代ローマ人にとっては重宝するだろう．
+    
+    then writing \codem{\\Cde\;} is the same as writing “Furthermore, I consider that Carthage must be destroyed”.
+    It should be useful for ancient Romani people who can speak Japanese.
   }
+  
   +p{
-    ブロックコマンドの自前定義についても，以下のような構文によってインラインコマンドと同様に行なえる：
+    You can define block commands by the following syntax which is the same as that of inline commands.
 
     \d-code(```
-      let-block （定義したいブロックコマンド名） （0個以上の引数） =
-        '<（置き換え後の記述）>
+      let-block (the name of the block command you want to define) (arguments) =
+        '< (description after replacing) >
     ```);%
 
-    ただし，またも\codem{\<}ではなく\codem{'\<}であることに注意されたい．
-    不恰好だが残念ながらこればかりは気をつけてもらうしかない．
-    この機構を用いると，例えば
-    段落末に必ず「ともあれ，カルタゴは滅ぶべきであると考える次第である．」という1文をつけ加えて
-    段落をつくるコマンド\codem{+pCde}は
+    Again, notice that you have to use \codem{'\<}, not \codem{\<}.
+    It is awkward, but there is no choice bu to be careful.
+    By using this function, for example, the command \codem{+pCde} which makes a paragraph with “Furthermore, I consider that Carthage must be destroyed” at the last part is define as follows.
 
     \d-code(```
       let-block +pCde t = '<
         +p{
           #t;
-          ともあれ，カルタゴは滅ぶべきであると考える次第である．
+          Furthermore, I consider that Carthage must be destroyed.
         }
       >
     ```);%
 
-    という具合に定義できる．以降\codem{+p}の代わりにこの\codem{+pCde}を使えば
-    自動で末尾に文が挿入されるからやはり便利である．
-    このほか，古代ローマ人以外にも便利な例としては次のようなブロックコマンドが定義できる：
+    If you use \codem{+pCde} instead of \codem{+pCde} from now on, the sentence is automatically added at the last, so it is useful.
+    There is also an example of a block commands which is useful for non-roman people.
 
     \d-code(```
       let-block +no-proof bt = '<
         #bt;
-        +p{証明は読者への演習課題とする．}
+        +p{The proof is an exercise for the readers.}
       >
     ```);
-
-    今度は引数がブロックテキストであることに注意されたい．ブロックテキストが格納された変数\codem{bt}も，
-    ブロックテキスト中に\codem{\#bt\;}と書くことでそこに内容を埋め込むことができる．
-    この定義は要するに，与えられたブロックテキストの後ろに
-    「証明は読者への演習課題とする．」と書かれた段落をくっつけるコマンドの定義になっている．
-    以下のようにして理工書の執筆に使えば大変便利である．
+    
+    Note that the argument is a block text.
+    By writing \codem{\#bt\;}, you can embed the contents in the variable \codem{bt} which stores block texts.
+    This is the definition of command which adds the paragraph with “The proof is an exercise for the readers.”  after the given block texts.
+    It is useful for writing science and engineering books as follows.
 
     \d-code(```
       +no-proof<
         +lemma{
-          （証明がめんどくさい補題の内容）
+          (The contents of a lemma whose proof is troublesome.)
         }
       >
     ```);
