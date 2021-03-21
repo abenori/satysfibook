@@ -4,7 +4,7 @@
 @require: enumitem/enumitem
 @import: preface
 @import: getting-started
-
+@import: alias-command-definition
 
 
 document(|
@@ -26,4 +26,23 @@ document(|
   +chapter?:(`introduction`){A motivation to develope \SATySFi;}<
   >
   +chapter?:(`getting-started`){A quick introduction to \SATySFi;}<#getting-started;>
+  +chapter?:(`basic-command-definition`){Command definitions: basics}<
+    +p{
+      In \ref-chapter(`getting-started`);, I explained the usages of basic command of \SATySFi; using \pkg{stdjareport}.
+      By the way, one of big advantages of markup languages is, by defining commands by yourself, you can do many things automatically or you can define a new descriptive markup.
+      In fact, commands such as \codem{+chapter}, \codem{+p} and \codem{\\dfn} are simply provided by \pkg{stdjareport}.
+      Users can define a similar definitions if they want.
+      I think that now many readers can't wait to define commands by themselves.
+      In this chapter, I will explain a basic way to define commands.
+      To say in advance, the explanations here is very ad-hoc.
+      If you read this chapter after learning \SATySFi; well, you may be surprised by such explanations like a children trick.
+      I thought, as I took care of various backgrounds of readers, such a rough explanation probably worth as a first step.
+      So please forgive me.
+      To get deeper understanding and define more flexible commands with more various functions, you need to first get a big picture of typesetting procedure done by \SATySFi;.
+      After that please read \ref-chapter(`advanced-command-definition`);.
+    }
+    +section{Simple aliases}< #alias-command-definition; >
+%    +section{プログラミング言語としての\SATySFi;}< #programming; >
+  >
+
 >
