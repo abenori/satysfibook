@@ -5,7 +5,7 @@ let alias-command-definition = '<
   +p{
     Let us start with a very simple example.
     Assume that, for example, you do not like the name of the command \codem{\\dfn} provided by \pkg{stdjareport} and you want to use the name \codem{\\new-word}.
-    Namely, you want to define a new command \codem{\\new-word} which “automatically changes”\codem{\\new-word\{(new word)\}} to \codem{\\dfn\{(new word)\}}
+    Namely, you want to define a new command \codem{\\new-word} which “automatically changes” \codem{\\new-word\{(new word)\}} to \codem{\\dfn\{(new word)\}}.
   }
   +p{
     To realize this, let us modify the preamble.
@@ -33,8 +33,8 @@ author = {Type set};
 
     \codem{let-inline} etc. is the definition of \codem{\\new-word}.
     The definition of a command is very similar to the definition of a function in programming languages.
-    \codem{it} is the argument which stores inline texts.%%%%%%%%%%%%
-    And by \codem{\#it\;}, you can use the argument received in inline texts.
+    \codem{it} is the argument which stores inline texts.
+    And by \codem{\#it\;}, you can use the argument received as inline texts.
     You can write the definition of a command as
 
     \d-code(```
