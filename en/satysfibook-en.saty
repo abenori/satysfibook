@@ -5,7 +5,7 @@
 @import: preface
 @import: getting-started
 @import: alias-command-definition
-
+@import: programming
 
 document(|
   title = {Unofficial translation of “The \SATySFi;book”};
@@ -42,7 +42,7 @@ document(|
       After that please read \ref-chapter(`advanced-command-definition`);.
     }
     +section{Simple aliases}< #alias-command-definition; >
-%    +section{プログラミング言語としての\SATySFi;}< #programming; >
+    +section{\SATySFi; as a programming language}< #programming; >
   >
 
 >
