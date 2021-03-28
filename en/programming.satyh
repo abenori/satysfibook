@@ -3,32 +3,23 @@
 
 let programming = '<
   +p{
-    既に述べたように，\SATySFi;はいわゆる函数型らしい特徴を兼ね備えた
-    組版処理向けのマークアップ言語である．
-    むしろ，より正確を期して言い表すならば
-    値呼びの函数型言語の上に組版処理用の種々の言語機能が分厚く搭載された
-    DSL（domain-specific language, 領域特化言語）だ．
-    プログラミング言語としての\SATySFi;の基礎的部分には
-    OCamlに大変よく似た体系が採用されており，
-    基礎的部分の理解を得るのに
-    \cite[`Igarashi-OCaml`];や\cite[`Asai-OCaml`];
-    といったOCamlに関する参考書，
-    或いは
-    \cite[`Igarashi-Program`];や\cite[`TaPL`];（およびその和訳 \cite[`TaPL-ja`];）
-    といった計算機言語や型システムに関する基礎理論を扱った理工書で代用することも十分可能なほどである．
-    とはいえ，OCamlなどの他言語から回り道せずとも\SATySFi;での最低限の直観を身につければ
-    十分\SATySFi;でのプログラミングが可能であり，
-    熱心に函数型プログラミングの基礎を習得したい読者ばかりではないであろうから，
-    ここでも簡単にプログラミング言語としての\SATySFi;について解説する．
-    また，OCamlと\SATySFi;との間には目的意識や美意識の違いに起因した多少の差異があるので，
-    これについて（既にOCamlで流暢にプログラミングできる読者に対しても）
-    \ref-subsection(`diff-from-ocaml`);で簡単に補足する．
+    As I have already mentioned, \SATySFi; is a markup language for a typesetting with futures of functional languages.
+    
+    
+    More precisely, it is a DSL (domain-specific language) which is equipped with various language functions for typesetting over the functional languages with call by value.
+    Basic part of \SATySFi; as a programming language uses a syntax which is very similar to that of Ocaml.
+    To understand the basic parts, one can use books on Ocaml such as \cite[`Igarashi-OCaml`]; and \cite[`Asai-OCaml`];.
+    Or, it is also possible to be substituted by books on basic theries of computational languages and type systems such as \cite[`Igarashi-Program`]; and \cite[`TaPL`];.
+    However, it is possible to learn programmings with \SATySFi; by getting intuition with \SATySFi;, without making a detour from other languages such as Ocaml.
+    I think not all of readers do not want to basics of functional languages.
+    So I briefly explain \SATySFi; as a programming language.
+    There are also some differences between Ocaml and \SATySFi; comming from senses of purpose and aesthetics.
+    For this (also for readers who can fluently do programming with Ocaml), I will add explanations in \ref-subsection(`diff-from-ocaml`);.
   }
-  +subsection{式と値}<
+  +subsection{Expressions and values}<
     +p{
-      \SATySFi;には対話環境が特に整備されていないので，
-      プログラムの計算結果をPDFに出力して確かめることにしよう．
-      ひとまず以下のようなコードを見てほしい：
+      Because \SATySFi; does not have 対話環境, we will check the result of a program by outputting to PDF.
+      First please take a look at the following code.
 
       \d-code(```
         @require: stdjareport
@@ -40,7 +31,7 @@ let programming = '<
 
         document (|
           title = {Programming in \SATySFi;};
-          author = {計 算太郎};
+          author = {Santaro Kei};
         |) '<
           +p{ Answer: \show-int(40 + 2); }
         >
@@ -48,74 +39,54 @@ let programming = '<
 
       \codem{let-inline}から始まる，
       未知でありながら前節で見たインラインコマンドを定義する方法によく似た構文が3つ連なっているが，
-      実際これはそれぞれ
-      \codem{\\show-int}，\codem{\\show-float}，\codem{\\show-string}
-      というインラインコマンドの定義である．
-      この定義をどう読むのかは後々わかることになるので，
-      今の段階ではそれぞれ
-      「与えられた
-      \meta-or{|整数|浮動小数点数|文字列|}
-      を版面に（数値の場合十進法で）出力するコマンド」
-      を定義するオマジナイだと思っていただきたい．
-      注目されたいのは\codem{\\show-int}を使う部分，すなわち
+      Indeed, these are the definition of inline commands \codem{\\show-int}, \codem{\\show-float} and \codem{\\show-string}, respectively.
+      You will understand how to read this definitions later.
+      %% 「オマジナイ」ってなんて言うの？
+      At this point, please think these as a オマジナイ which defines commands “to output a \meta-or{|integer|float|string|} (by decimal  system for numbers) to printed pages”.
+      Please pay attention to the part where \codem{\\show-int} is used, namely 
 
       \d-code(```
         ​  +p{ Answer: \show-int(40 + 2); }
       ```);%
 
-      である．丸括弧に囲まれた\codem{40 + 2}という怪しげな記述がある．
-      とりあえず，この文書を\SATySFi;処理系にかけてみると，
-      この段落に相当する部分は
+      
+      There is a strange expression \codem{40 + 2} surrounded by parentheses.
+      Anyway, let us process this document by \SATySFi;
+      Then the paragraph corresponding to here is output as
 
       \d-block(open Sample in '<
         +p{ Answer: \show-int(40 + 2); }
       >);%
 
-      と出力される．そう，${40} と ${2} の和が計算されているのである．
-      平たく言えば，こういった “計算をする処理” がプログラムの仕事の根幹であり，
-      “計算をする処理” をプログラムとして記述することをプログラミングと呼ぶ．
-      \codem{40 + 2}のような記述は
-      \dfnje{\index(`シキ`){式}}{expression}
-      またはしばしば
-      \dfnje{\index(`コウ`){項}}{term}と呼ばれ，
-      式を適切な構文にしたがって組み立てることでプログラムが構築される\footnote{
-        C言語やPythonなどの
-        “手続き的な” 観点に強く基づいている計算機言語に馴染みのある読者は
-        「式から文をつくり，文からプログラムを構築するのではないか？」
-        と思われるかもしれないが，
-        \SATySFi;に文の概念はない．
-        というか，式の特殊な場合が “手続き的な” 言語に備わっている文に相当するのである．
-        これはOCamlをはじめとする多くのいわゆる函数型言語に共通する性質である．
+      Yes, the sum of ${40} and ${2} is calculated.
+      To put it plainly, this kind of “calculation process” is a basic of works of the programming and describing a “calculation process” as a program is called programming.
+      Expressions as \codem{40 + 2} is called \dfn{expression}, or sometimes \dfn{term} and program is constructed by arranging expressions with a suitable syntax\footnote{
+        The readers who are familiar with languages based on a “procedural” viewpoint such as C programming language or Python may think “we make a statement from expressions and make a program from statements”.
+        There is no notion of statements in \SATySFi;
+        In fact, a special case of expressions corresponds to statements of “procedural” languages.
+        This is a property common to many,  so-called functional languages such as Ocaml.
       }．
     }
     +p{
+      As \codem{40 + 2} became to \codem{42} 
       \codem{40 + 2}の “計算が進んで” \codem{42}になったように，
-      式は一般に “それ以上計算しない式” へと “うつりかわっていく”．
-      この “うつりかわり” の過程を
-      \dfnje{\index(`ヒョウカ`){評価}}{evaluation}
-      またはしばしば
-      \dfnje{\index(`カンヤク`){簡約}}{reduction}
-      と呼び， “それ以上計算しない式” を
-      \dfnje{\index(`コウブンテキアタイ`){構文的値}}{syntactic value}
-      或いは単に
-      \dfnje{\index(`アタイ`){値}}{value}
-      と呼ぶ．
-      プログラムの動作とは，式を評価して値を求めることなのである．
+      , in general, expressions “change” to  “expressions not calculated any further”.
+      This process of “change” is called \dfn{evaluation} or \dfn{reduction} and “expressions not calculated any further” are called \dfn{syntactic value} or simply \dfn{value}.
+      Action of program is to evaluate expressions and calculate values.
     }
     +p{
-      もう少し複雑な計算をしてみよう．
+      Let us do a more complicated calculation.
 
       \d-code-and-block(```
         +p{ Answer: \show-int(1 + 2 * 3 - 4); }
       ```)(open Sample in '<
         +p{ Answer: \show-int(1 + 2 * 3 - 4); }
       >);%
-
-      \codem{\*}は乗算のための2項演算子である．
-      通常我々が「${1 + 2 \times 3 - 4}」と書いた時には
-      ${\paren{1 + \paren{2 \times 3}} - 4} と扱われるのと同様に，
-      \SATySFi;言語でも2項演算子の結合には優先順位がある．
-      やはり日常的な数式と同様に，括弧で囲うと優先順位を指示できる：
+      
+      \codem{\*} is a binary operator for multiplications.
+      When we write “${1 + 2 \times 3 - 4}”usually, it is regarded as ${\paren{1 + \paren{2 \times 3}} - 4}.
+      Similarly, there is a priority between binary operators in the \SATySFi; language.
+      Similar to usual formulas, you can clarify the priorities by enclosing them in parentheses.
 
       \d-code-and-block(```
         +p{ Answer: \show-int((1 + 2) * 3 - 4); }
@@ -123,38 +94,32 @@ let programming = '<
         +p{ Answer: \show-int((1 + 2) * 3 - 4); }
       >);%
 
-      なお，\SATySFi;での整数は
-      64bit環境であれば63bit符号つき整数，
-      32bit環境であれば31bit符号つき整数である\footnote{
-        この仕様は\SATySFi;の処理系の実装に使われているOCamlの
-        \code(`int`);型の仕様に起因する．
-      }．
+      Integers in \SATySFi; is 63bit signed integer type with 64bit system and 31bit signed integer type with 32bit system\footnote{
+        This behaviors is due to the specification of \code(`int`); in Ocaml which is used for the implementation of \SATySFi;
+      }.
     }
   >
-  +subsection?:(`variables`){変数とその束縛}<
+  +subsection?:(`variables`){Variables and binding}<
     +p{
-      ただ単に整数の計算をするだけでは電卓を叩いているのと大して違いはないから，
-      もう少し “プログラミングらしいこと” に踏み込もう．
-      すなわち，\dfnje{変数}{variable}の使用である．
-      変数は，\dfnje{変数名}{variable name}によって識別され，
-      何らかの値を\dfnje{束縛する}{bind}ことのできる機構だ．
-      変数名として使えるのは，
+      Simply calculating integers is not so much different from just using calculators.
+      So let us do what is “more like programming”.
+      Namely we use \dfn{variables}.
+      Variables are identified by \dfn{variable names} and it is a mechanism which can \dfn{bind} certain values.
+      The variable names should satisfy the following.
 
       \listing{
-        * 1文字目はラテン小文字（\codem{a}–\codem{z}）
+        * The first character is a lowercase latin character (\codem{a}–\codem{z})
 
-        * 2文字目以降は大小ラテン文字（\codem{a}–\codem{z}，\codem{A}–\codem{Z}），
-          数字（\codem{0}–\codem{9}），
-          またはハイフン（\codem{-}）
+        * The others are latin characters (\codem{a}–\codem{z}, \codem{A}–\codem{Z}), 
+          numbers (\codem{0}–\codem{9}), or
+          the hyphen (\codem{-}).
       }%
-
-      を満たす，長さが1文字以上のコード中の文字列である．
-      ただし，これに該当する文字列のうち
-      以下に列挙した39種類は\dfnje{予約語}{reserved word}と呼ばれ，
-      構文を示すなどの特別な用途で用いられることが定められたトークンなので，
-      変数名には使えない\footnote{
-        \codem{controls}と\codem{cycle}は今では特に使われないのだが，
-        かつてグラフィックスに用いられていたTikZ風の構文の名残として予約語のままになっている．
+      
+      However in the strings which satisfy the above, there are 39 exceptions.
+      They are called \dfn{reserved words} and are used for special purposes such as showing(??) syntax.
+      Therefore it is not allowed to use such words for variable names\footnote{
+        \codem{controls} and \codem{cycle} do not have special meanings today.
+        It was used in the TikZ-like syntax for graphics and they are still reserved words.
       }：
 
       \tokens{
