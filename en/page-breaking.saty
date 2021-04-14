@@ -4,19 +4,19 @@
 let page-breaking = '<
   +p{
     The most difficult part in \SATySFi; mechanism may be page-breaking. 
-    The abstract of processing itself is only separating sequences of block-boxed all of contents into appropriate lengths per page.
+    The abstract of processing itself is merely separating sequences of block-boxed all of contents into appropriate lengths per page.
     But, to generate good documents is needed page-breaking with procedual processings. 
-    So, this is necesarry part to develope \SATysFi;'s classfile.
+    So, this is the essential part to develop \SATysFi;'s classfile.
 
-    First, the primitive, it is equivalent to page-breaking is below:
+    First, the primitive, it is equivalent to page-breaking is this:
 
     \val({page-break})(Type.(page --> (tymtausub ${2} --> (tymtausub ${3} --> (block-boxes --> document)))));%
 
     I'll explain later about \type(Type.(tymtausub ${2})); and \type(Type.(tymtausub ${3}));. Because they are too complex to describe now.
-    Anyway, putting 2nd,3rd arguments typed these make the page-breaking interface extremely simple.
-    1st argument is paper-size, 4th argument is the sequence of block-boxes that is target of page-breaking. 
+    Anyway, putting 2nd, 3rd arguments typed these make the page-breaking interface extremely simple.
+    1st argument is paper-size. 4th argument is the sequence of block-boxes that is target of page-breaking. 
 
-    Type \type(Type.page);is data-type that is defined as below: 
+    Type \type(Type.page); is a data-type that is defined as: 
 
     \d-code(```
       type page =
@@ -169,5 +169,120 @@ let page-breaking = '<
     and you can not do it\footnote{
       There is no reason you cannot do it.
       If needed, it is sounds good to change the specification what imcompatible in future;
-      \it{\codem{page-break} itself processes apge-breaking}.}.}
+      \it{\codem{page-break} itself processes a page-breaking}.}.}
+
+  >
++section{primitves related page-breaking}<
+    +p{
+      There are some primitives to process related page-breaking.
+      Let me introduce them here.
+
+      \val-explain?:(`clear-page`)({clear-page})%
+        (Type.(block-boxes)) {
+          Page break in force.
+          In case inserted it at a target page unbreakable, 
+          it is equivalent as 
+          \codem{block-nil}.
+        }%
+
+      \val-explain?:(`add-footnote`)({add-footnote})%
+        (Type.(block-boxes --> inline-boxes)) {
+          
+          \codem{add-footnote \meta{bb}} inserts block-boxes \codem{\meta{bb}}
+          as footnote.
+          Return value has type \type(Type.inline-boxes);.
+          Associate with a place inserted this return value, 
+          and calculate inserting the footnote at processing page-breaking.  
+          As inline-boxes feature itself is equivalent as \codem{inline-nil}.
+        }%
+
+      \val-explain?:(`hook-page-break`)({hook-page-break})%
+        (Type.(((record [({page-number}, int)] --> (point --> unit))) --> inline-boxes)) {
+          Use as \codem{hook-page-break \meta{f}}.
+          Return value is inline-boxes.
+          Features in typesetting is equivalent as \codem{inline-nil}.
+          But, a hooking function \codem{\meta{f}} starts
+          when fixed place including here is which page in processing page-breaking.
+          
+          The case mined multiple hooking functions at the same page,
+          the functions starts by page contents order from initial to last.
+          
+          where result of page-breaking, inline-boxes which mined *hook* function 
+          is included at page ${n}, and refer point is ${\tuple{|x|y|}} then,
+          \codem{\meta{f}} starts when it received 
+          \codem{(\| page-number = \meta{n}\; \|)} as 1st argument 
+          and 
+          \codem{(\meta{x}, \meta{y})} as 2nd argument.
+          You can invoke *side-effects* with these argument values
+          like to register cross-reference linking based on page number with \codem{\meta{f}} 's contents.
+      
+        }%
+
+      About thing “To evaluate graphics is triggerd at page-breaking” 
+      written at \ref-chapter(`graphics`); is 
+      as same as this \codem{hook-page-break}.
+      Functions that receives reffered point and returns graphics,
+      like 4th argument of \codem{inline-graphics}, and 
+      hooking functions by \codem{hook-page-break}
+      are start evaluations at the same time.
+    }
+  >
++section{Basis of classfile}<
+
+  +p{
+    You got matter about page-breaking process.
+    Next, you would get nice idea to create a classfile.
+    Then, you may notice until you have not think ever:\quad;
+    where is *Outermost* text processing context from?\quad;
+    This is much simple. You can receive by primitives like:
+
+    \val-explain?:(`get-initial-context`)({get-initial-context})%
+    (type.(length --> (cmdI [math] --> context))){
+      This Returns default text processing context.
+      1st argument as a paragraph width,
+      2nd argument as a command that applying to math equation appeard at inline-text
+      like \codem{set-math-command}.
+    }%
+    \codem{get-initial-context} is only one that able to set a paragraph width.
+      There is \codem{get-initial-context} in a classfile that work as well. 
+      So, transform text processing context returned by this as *outermost* text processing context by needs.
+  } 
+
+
+      +example{
+        A definition of “A classfile, one of minimum that seems to work well” is like this:
+        
+        \d-code(```
+        let-inline ctx \math m = 
+          script-guard Latin (embed-math ctx m)
+
+        let-block ctx +p it {
+          line-break true true ctx
+            (read-inline ctx it ++ inline-fil)
+
+        let document bt =
+          let ctx = 
+          get-initial-context 440pt (command \math)
+            |> set-dominant-narrow-script Latin
+          in
+          let bb = read-block ctx bt in
+          page-break A4Paper
+            (fun _ -> (|
+              text-origin + (80pt, 100pt);
+              text-height = 630pt;
+            |))
+            (fun _ -> (|
+              header-origin = (0pt, 0pt);
+              header-content = block-nil;
+              footer-origin = (0pt, 0pt);
+              footer-content = block-nil;
+            |))
+            bb
+        ```);
+
+        Applying this classfile,
+        you are able to write document it has only paragraphs with \codem{+p} 
+        as block-text arguments of \codem{document} until you define new commands.
+      }
+  >
 >
