@@ -140,47 +140,31 @@ let programming = '<
         |when|while|with
         |}
 
-      変数名に関して少しだけ注意を喚起しておくと，
-      “整数を格納した変数\codem{x}から1引く式” を意図して
-      \codem{x-1}と書くと，意図とは異なる結果になる．
-      というのも，これは\codem{x-1}全体でひとつの変数名とみなされてしまうためだ\footnote{
-        このような記述をすると，多くの場合は型検査器が
-        「\codem{x-1}という未定義の変数が使われている」
-        というエラーを出すが，
-        \codem{x-1}という名前の変数が整数を格納する変数として
-        本当に使われている場合はとても厄介で，発見困難なバグの原因になるだろう．
-      }．回避策として，
-      2項演算子を使うときには\codem{x - 1}のように
-      必ず前後に空白文字をひとつずつ入れることを習慣づけるとよいだろう．
-      前後に空白文字を入れていないことによりトークンの切り分け方が意図とは異なる結果になることは
-      \codem{-}以外にも多くのパターンがあるので，
-      2項演算子を式と式の間に中置して使うときには前後に空白文字を入れることを強く推奨する．
+      I give some remarks on variable names.
+      If you write \codem{x-1} with the intention of being“expression which subtracts 1 from the variable \codem{x} storing an integer”, you will get an unintended result.
+      This is because \codem{x-1} is regarded as a one variable name\footnote{Usually type inspection gives an error “undefined variable \codem{x-1} is used”.
+      However, if the variable name \codem{x-1} is used as a variable storing integer, then the situation is very troublesome and it is cause of a bug which is difficult to find.}.
+      As a workaround, you should make it a habit of adding spaces before and after binomial operators as \codem{x - 1}.
+      
+      There are many cases other than \codem{-} which gives an unintended result of token separations by not adding spaces, I strongly recommend to add spaces before and after binomial operators when it is used between expressions.
     }
     +p{
-      さて，肝腎の変数への値の束縛は
+      The bound of variables are done by the \dfn{let-expression} which has the following form\footnote{
+        Here \codem{\meta{x}} and \codem{\metasub(${1}){expr}} are “metacharacters” and it does not mean that  the strings such as \codem{x} and \codem{expr1} are written as they are.
+        The readers should replace with a suitable things.
+        Such “metacharacters” will be appear frequently, so please get used to this.
+%        ここにイタリック体で
+%        \codem{\meta{x}}とか\codem{\metasub(${1}){expr}}などと書いたのは
+%        “メタ文字” であり，
+      }.
 
       \d-codem{
         let \meta{x} = \metasub(${1}){expr} in \metasub(${2}){expr}
       }%
 
-      という形をもつ\dfnje{let式}{let-expression}で行なう\footnote{
-        ここにイタリック体で
-        \codem{\meta{x}}とか\codem{\metasub(${1}){expr}}などと書いたのは
-        “メタ文字” であり，
-        実際にコード中に\codem{x}とか\codem{expr1}といった文字列を書いているわけではなく，
-        適宜あてはめるべきものに読み替えよ，ということを指す記述である．
-        以降もこの “メタ文字” は頻繁に登場するので是非慣れて頂きたい．
-      }．
-      \codem{\meta{x}}が束縛される変数名であり，
-      \codem{\metasub(${1}){expr}}および
-      \codem{\metasub(${2}){expr}}は式である．
-      このlet式は，\codem{\metasub(${1}){expr}}を評価した結果の値を
-      変数\codem{\meta{x}}に束縛し，
-      そして\codem{\metasub(${2}){expr}}を評価するのに使う．
-      要するに，\codem{\metasub(${2}){expr}}中では
-      変数\codem{\meta{x}}が
-      \codem{\metasub(${1}){expr}}を評価した結果の値として使えるのである．
-      実際に使ってみよう：
+      \codem{\meta{x}} is a name of a variable to be bound and \codem{\metasub(${1}){expr}} and \codem{\metasub(${2}){expr}} are expressions.
+      This let expression bound the value as a result of evaluating \codem{\metasub(${1}){expr}} to the variable \codem{\meta{x}} and evaluate \codem{\metasub(${2}){expr}}.
+      Namely, in \codem{\metasub(${2}){expr}}, you can use \codem{\meta{x}} as a value as a result of evaluating \codem{\metasub(${1}){expr}}.
 
       \d-code-and-block(```
         +p{ Answer:
@@ -199,26 +183,22 @@ let programming = '<
         }
       >);%
 
-      あまりにも大したことのない例だが，期待どおり計算できていることがわかる．
+      You can see that an expected value is calculated.
+%      あまりにも大したことのない例だが，期待どおり計算できていることがわかる．
     }
     +p{
-      ここですでにC言語やPythonなどの “手続き的な” 言語に慣れ親しんでいる人は
-      特によく注意されたいのだが，束縛は「代入」とは似て非なる概念である．
-      \SATySFi;に於ける変数は
-      （OCamlなどその他のいわゆる函数型言語の変数にも共通するのだが）
-      “値を入れておき，適宜変更できる箱” ではない．
-      むしろ，“値に別名をつけたもの” という直観の方が正確である．
+      Here is a note to readers who are already familiar “procedural” programming such as C programming language or Python.
+      The bound is close to the substitution but not the same.
+      Variables in \SATySFi; is not “a box one can store values and change the value always”. (It is also common to so-called functional programming such as Ocaml.)
+      A more correct intuition is “a value with an alias”.
     }
   >
-  +subsection{基本的なデータ}<
+  +subsection{Basic data}<
     +p{
-      \SATySFi;で扱えるデータは勿論整数だけではない．
-      浮動小数点数，文字列，真偽値，さらには
-      組版指定のための\dfnje{長さ}{length}の値などが扱える．
-      長さについては\ref-subsection(`length`);で，
-      真偽値は\ref-subsection(`conditionals`);で
-      条件分岐とともに解説するので，
-      ここではひとまず浮動小数点数と文字列について紹介する．
+      Of course \SATySFi; can use data other thatn integers.
+      It can use  floating point numbers, strings, booleans, and length for typesettings.
+      I will explain length in \ref-subsection(`length`); and booleans in \ref-subsection(`conditionals`); with an explanation of conditional brunchs.
+      Here I will introduce floating point numbers and strings.
     }
     +p{
       まずは小数などの値を扱うためのデータ，
