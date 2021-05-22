@@ -1222,3 +1222,5 @@ let-math \braket m1 m2 m3 =
   math-paren-with-middle
     (Math.angle-left 0.5pt) (Math.angle-right 0.5pt)
       Math.bar-middle [m1; m2; m3]
+
+let-inline \d--- = embed-string (string-unexplode [0x2014])

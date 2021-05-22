@@ -94,7 +94,7 @@ let preface = '<
     acquire a new intuition, which may require some readiness for the difficulties
     (although it is not that difficult at all than generally considered).
     Also, this chapter will mention the biggest characteristic of \SATySFi; as a
-    typesetting system --- the type system.
+    typesetting system \d---; the type system.
     This means it will also explain the type checker, which specifies
     what kind of documents and packages are accepted as a consistently typed items,
     while what kind of descriptions are denied as having some inconsistency.
