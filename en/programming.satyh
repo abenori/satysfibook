@@ -196,34 +196,27 @@ let programming = '<
   +subsection{Basic data}<
     +p{
       Of course \SATySFi; can use data other thatn integers.
-      It can use  floating point numbers, strings, booleans, and length for typesettings.
+      It can use  floating-point numbers, strings, booleans, and length for typesettings.
       I will explain length in \ref-subsection(`length`); and booleans in \ref-subsection(`conditionals`); with an explanation of conditional brunchs.
-      Here I will introduce floating point numbers and strings.
+      Here I will introduce floating-point numbers and strings.
     }
     +p{
-      まずは小数などの値を扱うためのデータ，
-      \dfnje{浮動小数点数}{floating-point number}である．
-      \SATySFi;での浮動小数点数の扱いは
-      \dfn{IEEE754} \cite[`IEEE754`];に準拠するものとする．
-      また，先走って型について述べておくと，
-      浮動小数点数は\type(Type.float);型をつけて扱われる．
-      浮動小数点数の値をPDFに出力して確認するために，
-      最初に掲げたテンプレートの段落の部分を
-      以下のように\codem{\\show-float}に変更しよう：
+      First I am going to introduce the data for decimals, namely \dfn{floating-point numbers}.
+      The treatment of floating-point numbers in \SATySFi; follows \dfn{IEEE754} \cite[`IEEE754`];.
+      To explain types going ahead, the type of floating-point numbers is \type(Type.float);
+      Let us change a paragraph in the above template to \codem{\\show-float} as follows to check the value of floating-point numbers by outputting to PDF.
 
       \d-code(```
           +p{ Answer: \show-float(42.195); }
       ```);%
 
-      整数の\codem{\\show-int}のときと同様に，
-      上の\codem{42.195}と書いてあるところを変えて遊んでみる．
-      浮動小数点数のリテラルは単純に\codem{42.195}とか\codem{3.14}などと書く．
-      現在のところ「\code(`1e-5`);」のような指数表記は用意していない．
-      小数部分が\codem{.0}の場合は\codem{5.0}を省略して\codem{5.}といった具合に書けるが，
-      整数部分が\codem{0.}の場合は\codem{.5}といった具合には省略できない．
-      浮動小数点数も整数と同様に加減乗除などの計算ができるが，
-      演算子は\codem{+}や\codem{\*}ではなく，
-      かわりに\codem{+.}や\codem{\*.}を使う：
+      Let us play by changing \codem{42.195} to others as like \codem{\\show-int}.
+      Literals for floating-point numbers are written simply as \codem{42.195} and \codem{3.14}.
+      At this point, you can not use exponential notation like “\code(`1e-5`);”.
+      If the decimal part is \codem{.0}, you can write \codem{5.} instead of \codem{5.0}.
+      But you can not omit the integer part even when it is \codem{.0}.
+      You can apply addition, subtraction, multiplications and division for floating-point numbers Similarly to integers.
+      However you should use \codem{+.} and \codem{\*.}, not \codem{+} and \codem{\*}.
 
       \d-code-and-block(```
         +p{ Answer: \show-float((1.1 +. 0.7) *. 2.4); }
@@ -232,10 +225,8 @@ let programming = '<
       >);%
 
       整数値と浮動小数点数との演算は，直接はできない．
-      型については後述するが，\codem{1 +. 2.0}のような記述は型エラーとなる．
-      評価されて整数値になる式\codem{\meta{expr}}
-      を浮動小数点数に関する計算に用いたい場合は
-      \codem{float \meta{expr}}で浮動小数点数に変換する：
+      An expression like \codem{1 +. 2.0} gives an type error. (I will explain on types later.)
+      When you want to use an expression \codem{\meta{expr}} which will be integers after evaluated, you have to tralnslate it to floting-point numbers by using \codem{float \meta{expr}}:
 
       \d-code-and-block(```
         +p{ Answer: \show-float((float (1 + 2 * 3 - 4)) *. 2.4); }
