@@ -93,7 +93,7 @@ let introduction = '<
       We will treat them in the next section.
     }
   >
-  +section ?:(`problem1`) {既存システムの問題点1：エラー報告能力}<
+  +section ?:(`problem1`) {Problem of existing systems 1: error report capability}<
     +p {
       As we already stated in the last section,
       markup languages have an unavoidable property that

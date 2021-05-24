@@ -24,8 +24,7 @@ document(|
     printed-by = None;
   |);
 |)'<
-  +chapter?:(`introduction`){A motivation to develope \SATySFi;}<
-  >
+  +chapter?:(`introduction`){The motivation for developing \SATySFi;}< #introduction; >
   +chapter?:(`getting-started`){A quick introduction to \SATySFi;}<#getting-started;>
   +chapter?:(`basic-command-definition`){Command definitions: basics}<
     +p{
