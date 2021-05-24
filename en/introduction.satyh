@@ -1,0 +1,96 @@
+@import: settings
+
+let introduction = '<
+  +p{
+    First, let me introduce 
+    "why \SATySFi; took the course of being a markup language and its processor," and
+    "what are the issues of existing markup languages and their processors
+     that \SATySFi; should resolve."
+    For that, we have to take a look at
+    the possible advantages and inevitable intrinsic disadvantages of the form of
+    markup language + processor, compared to other paradigms in general,
+    and how the existing markup languages enjoy the supremacy
+    and overcome those downsides to some extent.
+  }
+  +section{The advantages and disadvantages of markup-style} <
+    +p{
+      As a reader of this book,
+      you are probably well familiar with the following distinction of typesetting systems:
+      \listing{
+        * those in which users describe a document as a text file in a markup language
+          and give it as an input of a language processing system,
+          so that the resulting pages are output as a format like PDF\;
+
+        * those in which users enter a document
+          as the resulting pages are previewed on a GUI screen,
+          or on a so-called \dfn{WYSIWYG} editor.
+      }
+      For instance, \TeX;/\LaTeX;, troff, and Markdown etc. are the former,
+      while Microsoft Office Word, Adobe InDesign, and QuarkXpress etc. are the latter.
+    }
+    +p{
+      The debate about "which is better, markup languages or WYSIWYG style?" has been
+      very often seen (maybe because many users use at least either of them)\;
+      actually, each method can be considered to have trade-off of pros and cons.
+      Some general advantages of markup-language style compared to WYSIWYG style are,
+      as a mere tendency, as follows:
+      \listing{
+        * Since the inputs are a plain text, they are easy to track changes.
+        * User-defined commands:
+          ** accomplish complex automations.
+          ** enable updating the appearance flexibly afterwards
+             without changing the contents of the document.
+      }%
+      Therefore, if you want to benefit from these upsides to create documents,
+      markup languages are the way to go.
+      Especially, these properties are desirable for \dfn{semantic-markup} oriented users,
+      who wish to describe the contents of a document separately from its appearances.
+    }
+    +p{
+      On the other hand, there are some disadvantages:
+      \listing{
+        * Since users do not directly see the printed pages while editing,
+          writing is often unintuitive.
+        * Users tend to provide inappropriate input.
+      }
+      It is thinkable that the former issue can be relieved by aiming at
+      creating a hybrid software of WYSIWYG method and markup-language method,
+      rather than distinguishing them.
+      One of the real-world example of this paradigm is \dfn{LyX} \cite[`LyX`];,
+      and this kind of system seems to be convincing
+      on developing typesetting softwares for the time being.
+      However, it is not until a pure markup language and its processing system grow enough
+      that such a hybrid method is able to develop,
+      just as LyX is based on the existence of \LaTeX;, a markup-style typesetting system
+      (To tell you beforehand, 
+      \SATySFi; realized a typesetting system as a pure markup language
+      instead of the hybrid course, due to that reason in mind).
+    }
+    +p{
+      More important issue of markup languages is the latter.
+      WYSIWYG editors can be set up only to allow users valid operations on GUI
+      so that users can never produce broken inputs,
+      while for markup method, users can pass arbitrary text as a input,
+      so it is possible for users to provide inappropriate code.
+      Moreover, users may enter unintentional code overall as well as invalid code,
+      but as long as it is valid for the processing system, we cannot detect the flaws 
+      (in principle, unless we employ a statistical method like machine learning)
+      even if it is against users' will,
+      which can only be recognized by the users themselves through the output pages.
+      To the contrary, if the code is inappropriate for the processing system too,
+      detecting, for instance, wrong arguments provided to a command,
+      the system can detect them (in a non-statistical, "crisp" way),
+      so it can report to users and ask for corrections.
+      Therefore, in markup-language methods, which essentially have a disadvantage
+      that users is apt to give unintentional code, 
+      it affects largely to user's writing efficiency
+      how to report errors and imply suggestions of corrections
+      when a corrupted code for the system is given as the input.
+    }
+    +p{
+      Nevertheless, the existing markup-oriented typesetting systems
+      is insufficient in that point.
+      We will treat them in the next section.
+    }
+  >
+>

@@ -3,6 +3,7 @@
 @require: code
 @require: enumitem/enumitem
 @import: preface
+@import: introduction
 @import: getting-started
 @import: alias-command-definition
 
