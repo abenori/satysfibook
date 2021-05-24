@@ -93,4 +93,56 @@ let introduction = '<
       We will treat them in the next section.
     }
   >
+  +section ?:(`problem1`) {既存システムの問題点1：エラー報告能力}<
+    +p {
+      As we already stated in the last section,
+      markup languages have an unavoidable property that
+
+      \listing{
+        * users tend to provide inappropriate input
+      }%
+
+      by nature, and users' efficiency on writing is basically up to
+      how the errors are reported for inappropriate inputs.
+      However, it is often the case that conventional typesetting systems 
+      that adopt markup languages output unfriendly error information for the bad code.
+      Particularly, taking \LaTeX; as an example, the users must have seen errors like these,
+      maybe more than seeing their parents' face:
+    }
+    +console(`! Undefined control sequence.`);%
+    +console(`! Missing $ inserted.`);%
+    +console(`! Missing number, treated as zero.`);%
+    +p{
+      Sometimes the reason can be found out instantly, but basically, 
+      not until an inconsistency happens while typesetting is the error reported,
+      some of which originate from the inconsistency between 
+      the internal implementation of command and the provided arguments
+      that users do not know.
+      Frequently, the only information users can instantly receive is no more than
+      "something is wrong anywhere in the first ${n} liens,"
+      and in such case, the only choice for users is to identify the cause of error
+      with binary search by commenting out the code.
+    }
+    +p{
+      Error report is often not only user-unfriendly, but also takes long time until shown.
+      Again, this is because it is not until typesetting fails that the error shows up\;
+      for example, if a 500-page \LaTeX; document contains an illegal statement
+      at the position corresponding to the 490-th page,
+      the error is shown after the 490 pages are fully typeset, 
+      so it takes at least tens of seconds, or several minutes,
+      until users are notified the existence of typo.
+    }
+    +p{
+      Besides, such errors with unclear causes are serious problem
+      for package developers as well as end users.
+      Package developers mostly implement packages in order to provide complex process
+      under concise interface, and of course debug whether the complicated operations
+      are described as intended through specific examples of documents while developing.
+      During the development, the developers is almost always unable at all to figure out
+      how to fix the errors, because of the confusing error messages,
+      forced to struggle correcting them.
+      As a result,
+      unkind errors are a large obstacle for package developer's implementation too.
+    }
+  >
 >
