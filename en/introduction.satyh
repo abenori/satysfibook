@@ -198,4 +198,67 @@ let introduction = '<
       \SATySFi; aims to be a useful markup language that resolves these issues.
     }
   >
+  +section{\SATySFi;'s solution}<
+    +p{
+      \SATySFi; is a novel markup-language based typesetting system that features
+
+      \listing{
+        * high readability and customizability of code describing command definitions
+        * good responsiveness and clarity in error reports for user's inappropriate input
+      }%
+
+      so that the issues described in \ref-section(`problem`); are resolved.
+      The languages are divided into two layers,
+      "language for mainly defining commands" and "language for mainly writing documents,"
+      and \SATySFi; is implemented as a processing system for these languages.
+      The layer for writing documents is designed just like \LaTeX; in its appearance,
+      while for the layer for defining commands, the core language is designed and implemented
+      based on language specifications that are useful for so-called functional programming,
+      that is, functional-language flavored language specs,
+      being the foundation of the system,
+      so that the advantages listed above is accomplished at once through
+      the benefit of functional languages in that:
+
+      \listing{
+        * command definitions can be read and written focusing only on local process,
+          without taking much care about global state, and
+        * it is easy to ship with strong type system.
+      }%
+
+      This language is designed in a similar way to the functional languages like 
+      \dfn{OCaml} and \dfn{F\#}.
+      The processing system mainly consists of
+
+      \listing{
+        * the frontend that detects inappropriate inputs by users or package developers
+          and reports as an error (like a syntax parser or a type checker), and
+        * the backend that actually typesets the inputs which passed the check by the frontend
+          and outputs a PDF.
+      }%
+    }
+    +p{
+      In addition to implementing such a typesetting system,
+      publishing it as an open source software is also important.
+      The main reasons are
+
+      \listing{
+        * it is considered to be significant that users can use the typesetting system for free,
+          and
+        * the developed typesetting system can be actively improved and extended,
+      }
+
+      the latter of which is essential.
+      With multilingual typesetting in mind,
+      there are so wide variations of functions required for a typesetting system
+      that it is impossible to complete it from every viewpoint by the author himself.
+      The desired environment is such that everyone can read the open-source implementation
+      to understand what process is performed in the internal system,
+      and whenever an improvement is needed, users may actively participate in developing.
+    }
+    +p{
+      It is obvious that building all-round typesetting system from the beginning is unrealistic,
+      as even the derivatives of \TeX;, 
+      which have been developed and maintained by a number of developers for tens of years,
+    }
+  >
 >
