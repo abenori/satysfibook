@@ -145,4 +145,57 @@ let introduction = '<
       unkind errors are a large obstacle for package developer's implementation too.
     }
   >
+  +section ?:(`problem2`) {Problem of existing systems 2: Readability of command definitions}<
+    +p {
+      Other than the weakness about the error reporting,
+      there are another dissatisfaction at existing typesetting systems that adopt markup style\;
+      the readability of code such as command definition.
+      Some advantages of markup languages we have already introduced are that
+
+      \listing{
+        * User-defined commands:
+          ** accomplish complex automations.
+          ** enable updating the appearance flexibly afterwards
+             without changing the contents of the document.
+      }%
+
+      However, it is worth noting that these command definitions are not always easy to 
+      write, read or modify.
+      For example, \TeX;/\LaTeX; comes with command definition feature
+      in which some sorts of automations can easily defined as commands,
+      but when it comes to a complicated one, certain ingenuities are required,
+      resulting in code far from intuitive.
+      Command definitions of handling complex automations are not only hard to write, but also
+      trouble those who tries to read and modify them written by other people even worse.
+      In case of \TeX;/\LaTeX;, there are codes that nobody but the writers themselves
+      seems to be able to read and grasp, normally found deep inside the packages.
+    }
+  >
+  +section?:(`problem`){Summary of the issues}<
+    +p{
+      To sum up, here are the points we have been discussing:
+
+      \listing{
+        * Markup languages are preferable than WYSIWYG editors
+          from the viewpoint of semantics markup
+          (which tend to be used actively when writing documents like papers)
+ 
+        * The ultimate ideal is the combination of markup languages and WYSIWYG editors,
+          getting the best of both,
+          but as with LyX, such a software seems not be able to be realized
+          without the foundations of robust markup languages,
+          so a useful markup language has to be established first
+
+        * However, the existing markup languages have the following issues:
+
+          ** The error report is confusing and slow to show up,
+             so users cannot write documents or develop packages effectively
+
+          ** The legibility of code defining commands are often extremely so poor
+             that it is hard to update and modify
+      }%
+
+      \SATySFi; aims to be a useful markup language that resolves these issues.
+    }
+  >
 >
