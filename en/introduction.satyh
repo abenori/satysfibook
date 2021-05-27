@@ -2,7 +2,7 @@
 
 let introduction = '<
   +p{
-    First, let me introduce 
+    First, let us introduce 
     "why \SATySFi; took the course of being a markup language and its processor," and
     "what are the issues of existing markup languages and their processors
      that \SATySFi; should resolve."
@@ -36,7 +36,7 @@ let introduction = '<
       as a mere tendency, as follows:
       \listing{
         * Since the inputs are a plain text, they are easy to track changes.
-        * User-defined commands:
+        * User-defined commands
           ** accomplish complex automations.
           ** enable updating the appearance flexibly afterwards
              without changing the contents of the document.
@@ -56,12 +56,12 @@ let introduction = '<
       It is thinkable that the former issue can be relieved by aiming at
       creating a hybrid software of WYSIWYG method and markup-language method,
       rather than distinguishing them.
-      One of the real-world example of this paradigm is \dfn{LyX} \cite[`LyX`];,
+      One of the real-world example of this strategy is \dfn{LyX} \cite[`LyX`];,
       and this kind of system seems to be convincing
       on developing typesetting softwares for the time being.
       However, it is not until a pure markup language and its processing system grow enough
       that such a hybrid method is able to develop,
-      just as LyX is based on the existence of \LaTeX;, a markup-style typesetting system
+      just as LyX based on the existence of \LaTeX;, a markup-style typesetting system
       (To tell you beforehand, 
       \SATySFi; realized a typesetting system as a pure markup language
       instead of the hybrid course, due to that reason in mind).
@@ -103,7 +103,7 @@ let introduction = '<
       }%
 
       by nature, and users' efficiency on writing is basically up to
-      how the errors are reported for inappropriate inputs.
+      how the errors are reported for the inappropriate inputs.
       However, it is often the case that conventional typesetting systems 
       that adopt markup languages output unfriendly error information for the bad code.
       Particularly, taking \LaTeX; as an example, the users must have seen errors like these,
@@ -114,9 +114,9 @@ let introduction = '<
     +console(`! Missing number, treated as zero.`);%
     +p{
       Sometimes the reason can be found out instantly, but basically, 
-      not until an inconsistency happens while typesetting is the error reported,
+      not until an inconsistency happens while typesetting are errors reported,
       some of which originate from the inconsistency between 
-      the internal implementation of command and the provided arguments
+      the provided arguments and the internal implementation of command
       that users do not know.
       Frequently, the only information users can instantly receive is no more than
       "something is wrong anywhere in the first ${n} liens,"
@@ -148,27 +148,27 @@ let introduction = '<
   +section ?:(`problem2`) {Problem of existing systems 2: Readability of command definitions}<
     +p {
       Other than the weakness about the error reporting,
-      there are another dissatisfaction at existing typesetting systems that adopt markup style\;
-      the readability of code such as command definition.
+      there are another dissatisfaction at existing typesetting systems
+      that adopt markup style\d---;the readability of code such as command definition.
       Some advantages of markup languages we have already introduced are that
 
       \listing{
-        * User-defined commands:
+        * user-defined commands
           ** accomplish complex automations.
           ** enable updating the appearance flexibly afterwards
              without changing the contents of the document.
       }%
 
       However, it is worth noting that these command definitions are not always easy to 
-      write, read or modify.
+      write, read, or modify.
       For example, \TeX;/\LaTeX; comes with command definition feature
       in which some sorts of automations can easily defined as commands,
       but when it comes to a complicated one, certain ingenuities are required,
-      resulting in code far from intuitive.
+      resulting in a far-from-intuitive code.
       Command definitions of handling complex automations are not only hard to write, but also
       trouble those who tries to read and modify them written by other people even worse.
       In case of \TeX;/\LaTeX;, there are codes that nobody but the writers themselves
-      seems to be able to read and grasp, normally found deep inside the packages.
+      seem to be able to read and grasp, normally found deep inside the packages.
     }
   >
   +section?:(`problem`){Summary of the issues}<
@@ -177,7 +177,7 @@ let introduction = '<
 
       \listing{
         * Markup languages are preferable than WYSIWYG editors
-          from the viewpoint of semantics markup
+          from the viewpoint of semantic markup
           (which tend to be used actively when writing documents like papers)
  
         * The ultimate ideal is the combination of markup languages and WYSIWYG editors,
@@ -213,7 +213,7 @@ let introduction = '<
       and \SATySFi; is implemented as a processing system for these languages.
       The layer for writing documents is designed just like \LaTeX; in its appearance,
       while for the layer for defining commands, the core language is designed and implemented
-      based on language specifications that are useful for so-called functional programming,
+      based on a language specification that is useful for so-called functional programming,
       that is, functional-language flavored language specs,
       being the foundation of the system,
       so that the advantages listed above is accomplished at once through
@@ -256,14 +256,15 @@ let introduction = '<
       and whenever an improvement is needed, users may actively participate in developing.
     }
     +p{
-      It is obvious that building all-round typesetting system from the beginning is unrealistic,
+      It is perhaps almost obvious that building all-round typesetting system
+      at the early stage is unrealistic,
       as even for the derivatives of \TeX;, 
       which have been developed and maintained by a number of developers for tens of years,
       bug fixes and extensions are still worked on.
       \SATySFi;'s main purpose is to be a foundation of a typesetting system
       capable of multilingual typesetting,
-      and the immediate goal of the development is to reach a satisfactory mixed typesetting
-      of Japanese and Western languages for practice use,
+      while the immediate goal of the development is to reach a satisfactory mixed typesetting
+      of Japanese and Western languages for practical use,
       which is personally familiar to the author, a native speaker of Japanese.
     }
   >
@@ -330,10 +331,10 @@ let introduction = '<
 
       Probably, most users can only derive no more information than
       "something is wrong in the first 11 lines."
-      Since the error originates from the internal implementation of \codem{\\parbox},
+      The error originates from the internal implementation of \codem{\\parbox},
       and it is not until the process reaches there that
-      the arguments that the user passed do harm and causes such an error message,
-      the error is happening at the position where users do never know about,
+      the arguments that the user passed do harm and causes such an error message\d---;%
+      in other word, the error is happening at the position where users do never know about,
       which is so hard to understand.
     }
     +p{
@@ -462,7 +463,7 @@ let introduction = '<
       The message is straightforward enough for the user to get down to the correction.
       Such error reports are done by the type checker
       judging from the type inferred to the command \codem{\\parbox},
-      and this is exactly the benefit of static typing.
+      and this is definitely the benefit of static typing.
       As the above account suggests,
       the usefulness of types assertions is a big advantage of \SATySFi;
       that is not fulfilled by the existing markup-language style typesetting system.
