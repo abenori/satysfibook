@@ -257,8 +257,14 @@ let introduction = '<
     }
     +p{
       It is obvious that building all-round typesetting system from the beginning is unrealistic,
-      as even the derivatives of \TeX;, 
+      as even for the derivatives of \TeX;, 
       which have been developed and maintained by a number of developers for tens of years,
+      bug fixes and extensions are still worked on.
+      \SATySFi;'s main purpose is to be a foundation of a typesetting system
+      capable of multilingual typesetting,
+      and the immediate goal of the development is to reach a satisfactory mixed typesetting
+      of Japanese and Western languages for practice use,
+      which is personally familiar to the author, a native speaker of Japanese.
     }
   >
 >
