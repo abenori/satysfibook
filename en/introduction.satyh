@@ -267,4 +267,205 @@ let introduction = '<
       which is personally familiar to the author, a native speaker of Japanese.
     }
   >
+  +section{Error reporting}<
+    +p {
+      Now, let us introduce the error report features, along with some examples,
+      that back up user's efficient writing accomplished by \SATySFi;,
+      which was developed by the motivation mentioned above.
+      Supposing that a user tries to obtain the following output,
+      but includes a minor mistake in the input,
+      we will see the difference between the error messages produced by \LaTeX; and \SATySFi;.
+    }
+    % TODO shall we replace with some English verse, or lorem ipsum/
+    +d-block<
+      +p{
+        いろは歌：
+        \fbox{\parbox?:(Top)(5cm)<
+          +p{
+            色は匂へど散りぬるを，吾が世誰ぞ恒ならむ．
+            有為の奥山今日越えて，浅き夢見じ，酔ひもせず．
+          }
+        >}
+      }
+    >
+    +p{
+      First, in case of \LaTeX; (especially we assume p\LaTeX;),
+      the following is a code that compiles to a correct output:
+
+      \d-code(```
+        % -*- coding: utf-8 -*-
+        \documentclass{jsarticle}
+        \usepackage[T1]{fontenc}
+        \usepackage{lmodern}
+        \begin{document}
+          \indent
+            いろは歌：
+            \fbox{\parbox[t]{5cm}{%
+              色は匂へど散りぬるを，吾が世誰ぞ恒ならむ．
+              有為の奥山今日越えて，浅き夢見じ，酔ひもせず．
+            }}
+          \par
+        \end{document}
+      ```);%
+
+      What if the user forgot to specify the width of \codem{\\parbox},
+      so that the 8th line becomes as follows:
+
+      \d-code(```
+        \fbox{\parbox[t]{%
+      ```);%
+
+      Here, p\LaTeX; reports an error at some point for the invalid input,
+      showing the following error message
+      to the standard output (stdout) or the standard error (stderr):
+
+      \console(```
+        ! Argument of \@iiiparbox has an extra }.
+        <inserted text>
+                        \par
+        l.11     }}
+
+        ?
+      ```);%
+
+      Probably, most users can only derive no more information than
+      "something is wrong in the first 11 lines."
+      Since the error originates from the internal implementation of \codem{\\parbox},
+      and it is not until the process reaches there that
+      the arguments that the user passed do harm and causes such an error message,
+      the error is happening at the position where users do never know about,
+      which is so hard to understand.
+    }
+    +p{
+      Similarly, let's take a loot at the error
+      when the user took the optional argument of specifying the height for a required one.
+      Specifically, suppose that the 8th line was mistakenly written as follows.
+
+      \d-code(```
+        \fbox{\parbox{t}{5cm}{%
+      ```);%
+
+      Then the following error message emerges:
+
+      \console(```
+        ! Missing number, treated as zero.
+        <to be read again>
+                           t
+        l.11     }}
+
+        ?
+      ```);%
+
+      Once again, it is in the command implementation that the corruption is revealed,
+      and the user will have no idea what the direct cause is.
+      If the document is small enough, it may be easy to realize soon,
+      but if you are composing a large one, finding the cause is quite a nuisance.
+      In some case, you have to "do a steady binary search while commenting out
+      some of the code you've write to find out the cause."
+    }
+    +p{
+      Now, what will happen if it was done with \SATySFi;?  The following is crucial.
+      First, the \SATySFi; code to obtain the right output is as follows:
+
+      \d-code(```
+        % -*- coding: utf-8 -*-
+        @require: stdjareport
+        @import: local
+
+        document (|
+          title = {Test Document};
+          author = {Takashi SUWA};
+        |) '<
+          +p{
+            いろは歌：
+            \fbox{\parbox?:(Top)(5cm)<
+              +p{
+                色は匂へど散りぬるを，吾が世誰ぞ恒ならむ．
+                有為の奥山今日越えて，浅き夢見じ，酔ひもせず．
+              }
+            >}
+          }
+        >
+      ```);%
+
+      Just to be sure, commands like \codem{\\fbox} and \codem{\\parbox}
+      are named after the \LaTeX;'s correspondents,
+      and implemented only with \SATySFi;'s primitives.
+      We won't explain the details now, but they can be defined as a command as follows:
+
+      \d-code(```
+        let-inline ctx \fbox it =
+          let pads = (2pt, 2pt, 2pt, 2pt) in
+          let t = 0.5pt in
+          let deco (x, y) w h d =
+            [ stroke t Color.black
+                (Gr.rectangle (x, y -' d) (x +' w, y +' h)) ]
+          in
+            inline-frame-inner pads deco (read-inline ctx it)
+
+        type position-spec = Top | Bottom
+
+        let-inline ctx \parbox ?:specopt wid ib =
+          let blockf =
+            match specopt with
+            | None         -> embed-block-top ctx wid
+            | Some(Top)    -> embed-block-top ctx wid
+            | Some(Bottom) -> embed-block-bottom ctx wid
+          in
+            blockf (fun ctx -> read-block ctx ib)
+      ```);%
+
+      Now, what will happen the user did not specify the width for \codem{\\parbox} by mistake?
+      Changing the 13th line as follows:
+
+      \d-code(```
+        \fbox{\parbox?:(Top)<
+      ```);%
+
+      when processed, it is reported to be having an error, whose message will be like:
+
+      \console(```
+        ! [Type Error] at line 13, character 26 to line 16, character 1:
+            this expression has type
+              block-text,
+            but is expected of type
+              length.
+      ```);%
+
+      The error says that an argument of type \type(Type.block-text); is provided
+      from the 26th character in the 13th line,
+      but the actual argument that should be provided there is of \type(Type.length); type,
+      that is, a value that expresses a length.
+      Since the direct cause is obvious, users can instantly correct it according to the error.
+    }
+    +p{
+      Likewise, let's check out the error when an optional argument was mistakenly
+      given as a required argument.
+      Again, if the 13th line was replaced with the following code:
+
+      \d-code(```
+        \fbox{\parbox(Top)(5cm)<
+      ```);%
+
+      here is the error the user will see:
+
+      \console(```
+        ! [Type Error] at line 13, characters 18-23:
+            this expression has type
+              position-spec,
+            but is expected of type
+              length.
+      ```);%
+
+      It claims that an argument of type \type(Type.base-type {position-spec}); is supplied,
+      while the correct type as the required argument is \type(Type.length);.
+      The message is straightforward enough for the user to get down to the correction.
+      Such error reports are done by the type checker
+      judging from the type inferred to the command \codem{\\parbox},
+      and this is exactly the benefit of static typing.
+      As the above account suggests,
+      the usefulness of types assertions is a big advantage of \SATySFi;
+      that is not fulfilled by the existing markup-language style typesetting system.
+    }
+  >
 >
