@@ -1,0 +1,22 @@
+name: build-book
+on: push
+jobs:
+  build-book:
+    runs-on: ubuntu-latest
+    container:
+      image: amutake/satysfi:latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install required packages via Satyrographos
+        run: |
+          export HOME=/root
+          eval $(opam env)
+          opam update
+          opam install satysfi-enumitem
+          satyrographos install --library enumitem
+      - name: Compile the book
+        run: |
+          eval $(opam env)
+          satysfi en/satysfibook-en.saty
+# Reference: https://amutake.hatenablog.com/entry/2019/12/06/103839
