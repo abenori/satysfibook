@@ -234,12 +234,8 @@ let programming = '<
         +p{ Answer: \show-float((float (1 + 2 * 3 - 4)) *. 2.4); }
       >);%
 
-      \codem{float}とそれに伴う式との結合は2項演算子より強いので，
-      \codem{float 1 + 2 \* 3 - 4}と書くと
-      \codem{(float 1) + 2 \* 3 - 4}と等価な式として解釈されてしまうことに注意．
-      反対に，浮動小数点数へと評価される式\codem{\meta{expr}}を
-      小数部分を切り捨てて整数値として使いたい場合は
-      \codem{(round \meta{expr})}という形で書く：
+      Note that \codem{float 1 + 2 \* 3 - 4} is regarded as \codem{(float 1) + 2 \* 3 - 4} because the associativity between \codem{float} and successive expressions is stronger (?) than that of binary operators.
+      Conversely, to regard an expression \codem{\meta{expr}} evaluated to a floating-point numbers as an integers by rounding the decimal part, you should write \codem{(round \meta{expr})}.
 
       \d-code-and-block(```
         +p{ Answer: \show-int((round ((1.1 +. 0.7) *. 2.4)) * 2); }
@@ -247,14 +243,9 @@ let programming = '<
         +p{ Answer: \show-int((round ((1.1 +. 0.7) *. 2.4)) * 2); }
       >);%
 
-      ただし，\codem{(round \meta{expr})}は
-      \codem{\meta{expr}}の評価結果の浮動小数点数が
-      正負無限，NaN，または小数部分を切り捨てた整数が
-      \type(Type.int);型に収まらない場合の動作は未定義である．
-      なお，ここで用いた\codem{float}および\codem{round}は
-      実は\dfnje{函数}{function}と呼ばれるものであり，
-      後の\ref-subsection(`functions`);で
-      これらについてより一般性の高い説明を与える．
+      If the evaluated value of \codem{\meta{expr}} is the infinity, NaN or flat-numbers which is not in type \type(Type.int); after rounding the decimal parts, the evaluated value of \codem{(round \meta{expr})} is undefined.
+      By the way, \codem{float} and \codem{round} used here is called \dfn{functions}.
+      More general explanation will be given in \ref-subsection(`functions`);.
     }
     +p{
       続いては文字列である．文字列の “計算結果” を実際にPDFに出力するため，
