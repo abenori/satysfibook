@@ -6,7 +6,7 @@ let page-breaking = '<
     The most difficult part in \SATySFi; mechanism may be page-breaking. 
     An abstract of the processes itself is merely below\; separating sequences of block-boxed all of contents into appropriate lengths per page.
     But, to generate good documents is needed page-breaking with procedural processes. 
-    So, this is the essential part to develop \SATysFi;'s class file.
+    So, this is the essential part to develop \SATySFi;'s class file.
 
     First, the primitive, that is equivalent to page-breaking is this:
 
@@ -29,11 +29,11 @@ let page-breaking = '<
       \footnote{
       To be honest, type \type(Type.(product [length; length])); is sufficient to to set paper-size.
       I should have provided the values like \codem{A4Paper} at package level,
-      but it is not. Because of the (by original text, with word ``阿呆な" ) author's fault that of formalized like this at past days.
+      but it is not. Because of the (by original text, with word “阿呆な” ) author's fault that of formalized like this at past days.
       \val({Paper.a4})(Type.(product [length; length]));%
       Perhaps, type \type(Type.page); will disappear with incompatible change in near future. 
-  }.
-  To short this paragraph maximum roughly, the \codem{page-break} is the primitive.
+      }.
+    To short this paragraph maximum roughly, the \codem{page-break} is the primitive.
     that separates the sequence of block-boxes provided as the 4th argument based on paper-size provided as the 1st argument.
     The previous line is not satisfying as an explanation of \SATySFi;'s' page-breaking mechanism.
     From the next paragraphs, I'll describe it step by step.
@@ -76,7 +76,7 @@ let page-breaking = '<
     and the 2nd argument as block-text of contents. It returns the value its type 
     \type(Type.document); at last.
   }
-   +p{
+  +p{
     Let me talk about \type(Type.(tymtausub ${2})); I have put here.
     This is a type below:
 
@@ -88,7 +88,7 @@ let page-breaking = '<
     }%
     From this code, you see the 2nd argument provided to \codem{page-break}
     is a function that receives a record and returns record.
-    This function called at time within processing page-breaking;
+    This function called at time within processing page-breaking\;
     determined page contents until ${\paren{n - 1}} page,
     and pass a record
     \codem{(\| page-number = \meta{n}\; \|)}
@@ -102,7 +102,7 @@ let page-breaking = '<
       * ${\tuple{|x|y|}}：\quad;
         Left-top coordinate to position contents actually separated. 
     }%
-    But, you should take care of difference between axis of Graphics; ${y} of ${\tuple{|x|y|}} at here is 
+    But, you should take care of difference between axis of Graphics\; ${y} of ${\tuple{|x|y|}} at here is 
     a value based on an axis it is that having direction to bottom is ${+y}
     and left-top on paper as origin.
     If you want document pages as same format, having same length of texts from same point, on each pages,
@@ -126,9 +126,9 @@ let page-breaking = '<
     This is a type of function what receives record and returns record, like the 2nd argument.
     The function set the 3rd argument of \codem{page-break} is called by being passed a record 
     \codem{(\| page-number = \meta{n}\; \|)}
-    at time;
+    at time\;
     it has determined contents of ${n} th page and 
-    completed \it{hooking processing} in the page. 
+    completed \*hooking process\* in the page. 
     
       \d-codem{
       (\|
@@ -148,30 +148,30 @@ let page-breaking = '<
       * Draw sequence of block-boxs ${bb_1} as header, it pointed ${\tuple{|x_1|y_1|}} as left-top.
       * Draw sequence of block-boxs ${bb_2} as header, it pointed ${\tuple{|x_2|y_2|}} as left-top.
     }%
-    Please take care of axis of value. It is as same as the 2nd argument that described previous paragraph;
+    Please take care of axis of value. It is as same as the 2nd argument that described previous paragraph\;
     this axis has coordinate origin is left-top and direction ${+y} increase page bottom.
     Only \codem{page-break}'s the 2nd and the 3rd arguments use this axis.
   }
   +p{
     Above paragraphs are all specifications of primitive \codem{page-break}.
-    Let me appends a bit to them, it is about \it{At time line-breaking actually}.
-，  Correctly, \it{\codem{page-break} itself processes page-breaking} is not true,
+    Let me appends a bit to them, it is about \*At time line-breaking actually\*.
+    Correctly, \*\codem{page-break} itself processes page-breaking\* is not true,
     but starting process page-breaking  at all of document being returned value
     as type  \type(Type.document);
     In other words, a value as type \type(Type.document); is
-    \it{frozen} information about finally page-breaking that is not being processed page-breaking actually. 
-    It means; there is no process doing page-break actually written having return-value as type  
+    \*frozen\* information about finally page-breaking that is not being processed page-breaking actually. 
+    It means\; there is no process doing page-break actually written having return-value as type  
     \type(Type.document); without last one. 
     Because there is no primitive arranging type \type(Type.document);, 
     There is no reason to create a value as type \type(Type.document); by \codem{page-break} 
     without returning contents to output PDF.
-    The reason was what causing \it{side-effect} at page-breaking not using return-value,
+    The reason was what causing \*side-effect\* at page-breaking not using return-value,
     and you can not do it\footnote{
       There is no reason you cannot do it.
-      If needed, it is sounds good to change the specification what imcompatible in future;
-      \it{\codem{page-break} itself processes a page-breaking}.}.}
+      If needed, it is sounds good to change the specification what imcompatible in future\;
+      \*\codem{page-break} itself processes a page-breaking\*.}
+    .}
 
-  >
 +section{primitves related page-breaking}<
     +p{
       There are some primitives to process related page-breaking.
@@ -207,13 +207,13 @@ let page-breaking = '<
           The case mined multiple hooking functions at the same page,
           the functions starts by page contents order from initial to last.
           
-          where result of page-breaking, inline-boxes which mined *hook* function 
+          where result of page-breaking, inline-boxes which mined \*hook\* function 
           is included at page ${n}, and refer point is ${\tuple{|x|y|}} then,
           \codem{\meta{f}} starts when it received 
           \codem{(\| page-number = \meta{n}\; \|)} as 1st argument 
           and 
           \codem{(\meta{x}, \meta{y})} as the 2nd argument.
-          You can invoke *side-effects* with these argument values
+          You can invoke \*side-effects\* with these argument values
           like to register cross-reference linking based on page number with \codem{\meta{f}} 's contents.
       
         }%
@@ -233,11 +233,11 @@ let page-breaking = '<
     You got matter about page-breaking process.
     Next, you would get nice idea to create a class file.
     Then, you may notice until you have not think ever:\quad;
-    where is *Outermost* text processing context from?\quad;
+    where is \*Outermost\* text processing context from?\quad;
     This is much simple. You can receive by primitives like:
 
     \val-explain?:(`get-initial-context`)({get-initial-context})%
-    (type.(length --> (cmdI [math] --> context))){
+    (Type.(length --> (cmdI [math] --> context))){
       This Returns default text processing context.
       The 1st argument as a paragraph width,
       The2nd argument as a command that applying to math equation appeared at inline-text
@@ -245,7 +245,7 @@ let page-breaking = '<
     }%
     \codem{get-initial-context} is only one that able to set a paragraph width.
       There is \codem{get-initial-context} in a class file that work as well. 
-      So, transform text processing context returned by this as *outermost* text processing context by needs.
+      So, transform text processing context returned by this as \*outermost\* text processing context by needs.
   } 
 
 
