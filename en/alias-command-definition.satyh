@@ -1,0 +1,109 @@
+% -*- coding: utf-8 -*-
+@import: settings
+
+let alias-command-definition = '<
+  +p{
+    Let us start with a very simple example.
+    Assume that, for example, you do not like the name of the command \codem{\\dfn} provided by \pkg{stdjareport} and you want to use the name \codem{\\new-word}.
+    Namely, you want to define a new command \codem{\\new-word} which “automatically changes” \codem{\\new-word\{(new word)\}} to \codem{\\dfn\{(new word)\}}.
+  }
+  +p{
+    To realize this, let us modify the preamble.
+    Between \codem{document} and the place where \codem{\@require} and \codem{\@import} are, you can write the definition of commands.
+    Change \codem{\\dfn} (appeard in \ref-chapter(`getting-started`);) in documents  and add the definition of \codem{\\new-word} in the preamble as follows.
+
+    \d-code(```
+@require: stdjareport
+
+let-inline \new-word it =
+  {\dfn{#it;}}
+
+in
+document (|
+title = {An example};
+author = {Type set};
+|) '<
++chapter{First chapter}<
+  +p{
+    This is the first paragraph by \SATySFi;
+    Paragraphs are marked with \new-word{block command}.
+  }
+>
+    ```);
+
+    \codem{let-inline} etc. is the definition of \codem{\\new-word}.
+    The definition of a command is very similar to the definition of a function in programming languages.
+    \codem{it} is the argument which stores inline texts.
+    And by \codem{\#it\;}, you can use the argument received as inline texts.
+    You can write the definition of a command as
+
+    \d-code(```
+      let-inline (the name of the inline command you want to define) (arguments) =
+        {(description after replacing)}
+    ```);%
+
+    If you are an intermediate or above \LaTeX; user, then you may remember \code(`\newcommand`);.
+    In fact, the definition of a command like \codem{\\new-word} in \SATySFi; is almost similar to the following \LaTeX; code which defines \code(`\newWord`);, assuming \code(`\dfn`); is defined.
+
+    \d-code(```
+      \newcommand{\newWord}[1]{\dfn{#1}}
+    ```);
+
+    \code(`#1`); in this definition corresponds to \codem{\#it\;} in \SATySFi;.
+    You can also define a command which has no argument.
+    For example, if you defined as
+
+    \d-code(```
+      let-inline \Cde =
+        {Furthermore, I consider that Carthage must be destroyed}
+    ```);
+    
+    then writing \codem{\\Cde\;} is the same as writing “Furthermore, I consider that Carthage must be destroyed”.
+    It should be useful for ancient Romani people who can speak Japanese.
+  }
+  
+  +p{
+    You can define block commands by the following syntax which is the same as that of inline commands.
+
+    \d-code(```
+      let-block (the name of the block command you want to define) (arguments) =
+        '< (description after replacing) >
+    ```);%
+
+    Again, notice that you have to use \codem{'\<}, not \codem{\<}.
+    It is awkward, but there is no choice bu to be careful.
+    By using this function, for example, the command \codem{+pCde} which makes a paragraph with “Furthermore, I consider that Carthage must be destroyed” at the last part is define as follows.
+
+    \d-code(```
+      let-block +pCde t = '<
+        +p{
+          #t;
+          Furthermore, I consider that Carthage must be destroyed.
+        }
+      >
+    ```);%
+
+    If you use \codem{+pCde} instead of \codem{+pCde} from now on, the sentence is automatically added at the last, so it is useful.
+    There is also an example of a block commands which is useful for non-roman people.
+
+    \d-code(```
+      let-block +no-proof bt = '<
+        #bt;
+        +p{The proof is an exercise for the readers.}
+      >
+    ```);
+    
+    Note that the argument is a block text.
+    By writing \codem{\#bt\;}, you can embed the contents in the variable \codem{bt} which stores block texts.
+    This is the definition of command which adds the paragraph with “The proof is an exercise for the readers.”  after the given block texts.
+    It is useful for writing science and engineering books as follows.
+
+    \d-code(```
+      +no-proof<
+        +lemma{
+          (The contents of a lemma whose proof is troublesome.)
+        }
+      >
+    ```);
+  }
+>

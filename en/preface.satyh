@@ -1,0 +1,235 @@
+% -*- coding: utf-8 -*-
+@import: settings
+
+let preface = '<
+  +p{
+    The purpose of this book is to explain a novel typesetting system, \SATySFi;,
+    which the author developed as a product of MITOU Program in 2017,
+    and still in development as of December 2018.
+    \SATySFi; consists of a markup language (along with its underlying programming language)
+    and its processing system\;
+    when a user writes a document as a code and pass it to the processing system,
+    it performs typesetting according to the instructions, generating a PDF.
+  }
+  +p{
+    \dfn{\TeX;}/\dfn{\LaTeX;} are conventional typesetting systems of such form,
+    which are commonly used for typesetting scientific papers.
+    You may wonder why we had to create another system, in spite of
+    all those widely-used similar softwares.
+    Simply put, what characters of \SATySFi; makes is "unexplored"\footnote{
+      % TODO Shall we separate translations note from original note?
+      "MITOU" originates its name from a Japanese word "未踏", which means "unexplored".
+    }?
+  }
+  +p{
+    To come to the point,
+    the most fundamental difference is not in the typesetting feature itself, but in that
+
+    \listing{
+      * how easy it is to define a command\footnote{
+          This may sound peculiar for those who are not used to \LaTeX;,
+          but a "command" generally refers to a tag
+          associated with a document markup or a instruction for typesetting.
+        }, and how readable its definition is, and
+      * how errors are reported for a broken input.
+    }%
+
+    While being a markup language,
+    \SATySFi; comes with many so-called functional programming features,
+    which enable to read and write command definitions
+    in the same manner as ordinary programming languages.
+    This is contrary to \TeX;/\LaTeX; in that "if you want to define a fancy command,
+    you have to understand the mechanism of term replacement peculiar to \TeX;,
+    forced to write an unintuitive implementation, and it is so hard to debug."
+    Moreover, provided with a strong type system thanks to the functional language design,
+    \SATySFi; detects a kind of inappropriate inputs with the type system before typesetting, 
+    and (in most cases) shows an error which facilitates identifying the input error.
+    Again, this is opposite to the strategy of \TeX;/\LaTeX;,
+    which "instantly start typesetting based on the source received, 
+    and emit an error when it encounters an inconsistency in the course of process."
+    Due to such an error reporting system,
+    we can expect \SATySFi; a better writing experience than ever.
+  }
+  +p{
+    We have explained a very rough overview of motivation of developing \SATySFi;,
+    but some of you may still doubt if it's indeed useful.
+    In \ref-chapter(`introduction`);,
+    we will explain how the current form of \SATySFi; came about,
+    and at what point \SATySFi; is differentiated.
+    If you are already feeling like "let me try \SATySFi; right now," or
+    "explain me how to write a code, rather than repeating tediously how efficient it is,"
+    you may skip reading \ref-chapter(`introduction`);.
+    When you can hardly get into sleep
+    because you have been staring at the display inputting \SATySFi; code,
+    we would like you to remember not having looked through \ref-chapter(`introduction`); yet,
+    skim over the chapter while making camomile tea or something,
+    and grasp the concept of this system,
+    then the author would be satysfied, I mean, satisfied.
+  }
+  +p{
+    Now let us introduce the structure of this book.
+    Each component of \SATySFi; is complexly dependent on each other,
+    so it is quite difficult to understand each of them independently,
+    that is, as a completely separate concept from others.
+    Therefore, this book is as a whole structured under the policy of
+    "first convey an approximate way of understanding,
+    and then gradually rephrase with more general explanation."
+    Therefore, for Chapter 2 and succeeding chapters, 
+    we recommend not to skip a chapter as much as possible.
+  }
+  +p{
+    In \ref-chapter(`getting-started`);,
+    we will have you grasp the way of writing documents with \SATySFi;
+    through the description of usages of commands
+    defined in a class file called \pkg{stdjareport}.
+    % TODO: should we use another class file aimed to English document?
+    Referring to this chapter, the reader will become able to write a minimum simple document 
+    (without user-defined commands).
+　}
+  +p{
+    In \ref-chapter(`basic-command-definition`);,
+    we will explain the very basics of how to define a command by users themselves.
+    The latter half of this chapter will start to touch on \SATySFi; as a programming language,
+    so the readers who are not used to so-called functional programming is to
+    acquire a new intuition, which may require some readiness for the difficulties
+    (although it is not that difficult at all than generally considered).
+    Also, this chapter will mention the biggest characteristic of \SATySFi; as a
+    typesetting system \d---; the type system.
+    This means it will also explain the type checker, which specifies
+    what kind of documents and packages are accepted as a consistently typed items,
+    while what kind of descriptions are denied as having some inconsistency.
+    Having said that, mainly explained there is
+    a part of type system of \SATySFi; that have much in common with
+    that of so-called functional languages like OCaml and F\#.
+  }
+  +p{
+    In \ref-chapter(`overall-structure`);, we will explain the full picture of
+    \SATySFi; processing system, overviewing the responsibility of each part.
+    The overall tasks of the processing system do not really differ from
+    that of the processing system of \TeX; or browser's rendering engines,
+    but it is essential to follow them in order to understand
+    what formalizations establish the treatment of various data through the types in \SATySFi;,
+    and which process corresponds to each primitive\footnote{
+      It refers to a build-in functions etc. that is equipped as a language feature.
+    }, the foundation of typesetting.
+  }
+  +p{
+    In \ref-chapter(`advanced-command-definition`);,
+    we will explain a method of defining more advanced commands
+    that interacts with the typesetting itself,
+    assuming that the reader has already grasped each functionality of each component.
+    We will start explaining how to manipulate the basic configurations of typography
+    such as font size, font face, text colors, and leading,
+    and to control line breaking.
+    Also, we will explain the unique treatments of types that originate to typesetting
+    (but that are not found in generic computational languages) that \SATySFi; provides.
+    Much of \SATySFi; are designed to detect inconsistencies as statically as possible
+    with this type system, and such questions like "what are these roundabout rules?"
+    that the readers will have had will be resolved here.
+  }
+  +p{
+    \ref-chapter(`line-breaking`); to \ref-chapter(`page-breaking`); are specifics,
+    each of which explains
+    line breaking,
+    systems and configurations,
+    typography,
+    graphics,
+    math typesetting,
+    cross references, and
+    page breaking.
+    Many relevant primitives will be explained in each chapter,
+    enabling users and package developers to define commands
+    manipulating typesettings more flexibly.
+  }
+  +p{
+    The remaining chapters is for those who wish
+    to acquire a in-depth understanding of \SATySFi;, and moreover,
+    to develop \SATySFi; itself.
+    In \ref-chapter(`future-work`);,
+    we will explain the improvement plans of the current status of \SATySFi; 
+    and the features we want to extend or add in the future.
+    In particular, we will mention the \dfn{text mode} that is currently under implementation,
+    the mode that outputs a text file (instead of PDF).
+    Thanks to this mode, 
+    we will be able to obtain both PDF and source file (like HTML or \LaTeX;)
+    from a single \SATySFi; document (with proper packages prepared).
+    In \ref-chapter(`specification`);, 
+    we will present the grammar, operational semantics, type systems and so on,
+    for a very small subset language of \SATySFi;.
+    These are for real geeks, or an expert in programming language theory
+    who are interested in formalizations of \SATySFi;,
+    and perhaps they are not needed to be read at all in practice.
+  }
+  +p{
+    The above is the structure of this book.
+    As you can see a large chapter about future work in \ref-chapter(`future-work`);,
+    \SATySFi; is yet in the stage of trial and error.
+    Therefore, as a kind of the author's selfishness,
+    we want you to gracefully regard this book as 
+    a "snapshot record at a turning point in the history of \SATySFi;,"
+    rather than an "eternal reference book of \SATySFi;."
+    Of course, current \SATySFi; is already mature enough
+    that the author used it for writing a master's thesis,
+    and I am confident that the formulation is fairly good as a language feature overall,
+    so I am not going to undergo drastic changes that replace basis of the language features.
+  }
+  +p{
+    When developing \SATySFi; I have received a great support from many people.
+    % TODO Should we check the English notation of their name?
+    Firstly, as the MITOU project, I have received advices from many people,
+    including the PM, Takesako Yoshinori, and the general PM, Takeuchi Ikuo,
+    and also received great financial support for the project.
+    Also, after the presentation of result report,
+    many people helped me with improving and extending \SATySFi; with their kindness.
+    I would like to express my special thanks of gratitude to the following people:
+    \listing{
+      * \person-github{Daiki Matsunaga}{matsud224} 
+        carried out a various important extensions to the proessing system, 
+        such as compiling to stack machine, exhaustiveness checker for pattern matching,
+        and suggestion for correction of undefined variable names.
+
+      * \person-github{Masaki Hara}{qnighy}
+        refactored the lexer and the parser \cite[`satysfi-syntax-memo`];,
+        and enabled cross compilation for Windows \cite[`satysfi-cross-windows`];.
+
+      * \person-github{Hiromi Ishii}{konn}
+        implemented a class file called Streamer\cite[`satysfi-steamer`]; 
+        for generating slides with \SATySFi; without any specifications,
+        and suggested to add many primitives in the way of implementing.
+
+      * \twitter{miettal} implemented  \SATySFi; Online \cite[`satysfi-online`];.
+
+      * \github{pandaman64} implemented \SATySFi; Playground \cite[`satysfi-playground`];.
+
+      * \person-github{Daichi Oohashi}{leque}
+        improved the development in OCaml in various way,
+        such as migrating ocamlbuild from dune.
+
+      * \person-github{Takuma Ishikawa}{nekketsuuu},
+        \person-github{Yuichi Nishiwaki}{nyuichi},
+        \github{sakas--},
+        \github{objmagic},
+        \person-github{Masanori Ogino}{omasanori}, and
+        \person-github{Noriaki Sakamoto}{na4zagin3},
+        cooperated greatly to establish the ways of installing
+        and the behavior of processing system.
+
+      * \github{ToruNiina} and
+        \github{forestaa}
+        extended the math package.
+
+      * \person-github{YOSHIMURA Yuu}{y-yu}
+        introduced TraviS CI to Macrodown, the former version of \SATySFi;.
+
+      * \github{theoldmoon0602},
+        \github{equal-l2},
+        \github{sunaemon}, and
+        \github{KilledByNLP},
+        presented fixes with careful observations.
+    }%
+  }
+  +ragged-right{
+    September 2018\quad;
+    Takashi SUWA
+  }
+>

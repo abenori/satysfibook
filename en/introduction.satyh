@@ -1,0 +1,472 @@
+@import: settings
+
+let introduction = '<
+  +p{
+    First, let us introduce 
+    "why \SATySFi; took the course of being a markup language and its processor," and
+    "what are the issues of existing markup languages and their processors
+     that \SATySFi; should resolve."
+    For that, we have to take a look at
+    the possible advantages and inevitable intrinsic disadvantages of the form of
+    markup language + processor, compared to other paradigms in general,
+    and how the existing markup languages enjoy the supremacy
+    and overcome those downsides to some extent.
+  }
+  +section{The advantages and disadvantages of markup-style} <
+    +p{
+      As a reader of this book,
+      you are probably well familiar with the following distinction of typesetting systems:
+      \listing{
+        * those in which users describe a document as a text file in a markup language
+          and give it as an input of a language processing system,
+          so that the resulting pages are output as a format like PDF\;
+
+        * those in which users enter a document
+          as the resulting pages are previewed on a GUI screen,
+          or on a so-called \dfn{WYSIWYG} editor.
+      }
+      For instance, \TeX;/\LaTeX;, troff, and Markdown etc. are the former,
+      while Microsoft Office Word, Adobe InDesign, and QuarkXpress etc. are the latter.
+    }
+    +p{
+      The debate about "which is better, markup languages or WYSIWYG style?" has been
+      very often seen (maybe because many users use at least either of them)\;
+      actually, each method can be considered to have trade-off of pros and cons.
+      Some general advantages of markup-language style compared to WYSIWYG style are,
+      as a mere tendency, as follows:
+      \listing{
+        * Since the inputs are a plain text, they are easy to track changes.
+        * User-defined commands
+          ** accomplish complex automations.
+          ** enable updating the appearance flexibly afterwards
+             without changing the contents of the document.
+      }%
+      Therefore, if you want to benefit from these upsides to create documents,
+      markup languages are the way to go.
+      Especially, these properties are desirable for \dfn{semantic-markup} oriented users,
+      who wish to describe the contents of a document separately from its appearances.
+    }
+    +p{
+      On the other hand, there are some disadvantages:
+      \listing{
+        * Since users do not directly see the printed pages while editing,
+          writing is often unintuitive.
+        * Users tend to provide inappropriate input.
+      }
+      It is thinkable that the former issue can be relieved by aiming at
+      creating a hybrid software of WYSIWYG method and markup-language method,
+      rather than distinguishing them.
+      One of the real-world example of this strategy is \dfn{LyX} \cite[`LyX`];,
+      and this kind of system seems to be convincing
+      on developing typesetting softwares for the time being.
+      However, it is not until a pure markup language and its processing system grow enough
+      that such a hybrid method is able to develop,
+      just as LyX based on the existence of \LaTeX;, a markup-style typesetting system
+      (To tell you beforehand, 
+      \SATySFi; realized a typesetting system as a pure markup language
+      instead of the hybrid course, due to that reason in mind).
+    }
+    +p{
+      More important issue of markup languages is the latter.
+      WYSIWYG editors can be set up only to allow users valid operations on GUI
+      so that users can never produce broken inputs,
+      while for markup method, users can pass arbitrary text as a input,
+      so it is possible for users to provide inappropriate code.
+      Moreover, users may enter unintentional code overall as well as invalid code,
+      but as long as it is valid for the processing system, we cannot detect the flaws 
+      (in principle, unless we employ a statistical method like machine learning)
+      even if it is against users' will,
+      which can only be recognized by the users themselves through the output pages.
+      To the contrary, if the code is inappropriate for the processing system too,
+      detecting, for instance, wrong arguments provided to a command,
+      the system can detect them (in a non-statistical, "crisp" way),
+      so it can report to users and ask for corrections.
+      Therefore, in markup-language methods, which essentially have a disadvantage
+      that users is apt to give unintentional code, 
+      it affects largely to user's writing efficiency
+      how to report errors and imply suggestions of corrections
+      when a corrupted code for the system is given as the input.
+    }
+    +p{
+      Nevertheless, the existing markup-oriented typesetting systems
+      is insufficient in that point.
+      We will treat them in the next section.
+    }
+  >
+  +section ?:(`problem1`) {Problem of existing systems 1: error report capability}<
+    +p {
+      As we already stated in the last section,
+      markup languages have an unavoidable property that
+
+      \listing{
+        * users tend to provide inappropriate input
+      }%
+
+      by nature, and users' efficiency on writing is basically up to
+      how the errors are reported for the inappropriate inputs.
+      However, it is often the case that conventional typesetting systems 
+      that adopt markup languages output unfriendly error information for the bad code.
+      Particularly, taking \LaTeX; as an example, the users must have seen errors like these,
+      maybe more than seeing their parents' face:
+    }
+    +console(`! Undefined control sequence.`);%
+    +console(`! Missing $ inserted.`);%
+    +console(`! Missing number, treated as zero.`);%
+    +p{
+      Sometimes the reason can be found out instantly, but basically, 
+      not until an inconsistency happens while typesetting are errors reported,
+      some of which originate from the inconsistency between 
+      the provided arguments and the internal implementation of command
+      that users do not know.
+      Frequently, the only information users can instantly receive is no more than
+      "something is wrong anywhere in the first ${n} liens,"
+      and in such case, the only choice for users is to identify the cause of error
+      with binary search by commenting out the code.
+    }
+    +p{
+      Error report is often not only user-unfriendly, but also takes long time until shown.
+      Again, this is because it is not until typesetting fails that the error shows up\;
+      for example, if a 500-page \LaTeX; document contains an illegal statement
+      at the position corresponding to the 490-th page,
+      the error is shown after the 490 pages are fully typeset, 
+      so it takes at least tens of seconds, or several minutes,
+      until users are notified the existence of typo.
+    }
+    +p{
+      Besides, such errors with unclear causes are serious problem
+      for package developers as well as end users.
+      Package developers mostly implement packages in order to provide complex process
+      under concise interface, and of course debug whether the complicated operations
+      are described as intended through specific examples of documents while developing.
+      During the development, the developers is almost always unable at all to figure out
+      how to fix the errors, because of the confusing error messages,
+      forced to struggle correcting them.
+      As a result,
+      unkind errors are a large obstacle for package developer's implementation too.
+    }
+  >
+  +section ?:(`problem2`) {Problem of existing systems 2: Readability of command definitions}<
+    +p {
+      Other than the weakness about the error reporting,
+      there are another dissatisfaction at existing typesetting systems
+      that adopt markup style\d---;the readability of code such as command definition.
+      Some advantages of markup languages we have already introduced are that
+
+      \listing{
+        * user-defined commands
+          ** accomplish complex automations.
+          ** enable updating the appearance flexibly afterwards
+             without changing the contents of the document.
+      }%
+
+      However, it is worth noting that these command definitions are not always easy to 
+      write, read, or modify.
+      For example, \TeX;/\LaTeX; comes with command definition feature
+      in which some sorts of automations can easily defined as commands,
+      but when it comes to a complicated one, certain ingenuities are required,
+      resulting in a far-from-intuitive code.
+      Command definitions of handling complex automations are not only hard to write, but also
+      trouble those who tries to read and modify them written by other people even worse.
+      In case of \TeX;/\LaTeX;, there are codes that nobody but the writers themselves
+      seem to be able to read and grasp, normally found deep inside the packages.
+    }
+  >
+  +section?:(`problem`){Summary of the issues}<
+    +p{
+      To sum up, here are the points we have been discussing:
+
+      \listing{
+        * Markup languages are preferable than WYSIWYG editors
+          from the viewpoint of semantic markup
+          (which tend to be used actively when writing documents like papers)
+ 
+        * The ultimate ideal is the combination of markup languages and WYSIWYG editors,
+          getting the best of both,
+          but as with LyX, such a software seems not be able to be realized
+          without the foundations of robust markup languages,
+          so a useful markup language has to be established first
+
+        * However, the existing markup languages have the following issues:
+
+          ** The error report is confusing and slow to show up,
+             so users cannot write documents or develop packages effectively
+
+          ** The legibility of code defining commands are often extremely so poor
+             that it is hard to update and modify
+      }%
+
+      \SATySFi; aims to be a useful markup language that resolves these issues.
+    }
+  >
+  +section{\SATySFi;'s solution}<
+    +p{
+      \SATySFi; is a novel markup-language based typesetting system that features
+
+      \listing{
+        * high readability and customizability of code describing command definitions
+        * good responsiveness and clarity in error reports for user's inappropriate input
+      }%
+
+      so that the issues described in \ref-section(`problem`); are resolved.
+      The languages are divided into two layers,
+      "language for mainly defining commands" and "language for mainly writing documents,"
+      and \SATySFi; is implemented as a processing system for these languages.
+      The layer for writing documents is designed just like \LaTeX; in its appearance,
+      while for the layer for defining commands, the core language is designed and implemented
+      based on a language specification that is useful for so-called functional programming,
+      that is, functional-language flavored language specs,
+      being the foundation of the system,
+      so that the advantages listed above is accomplished at once through
+      the benefit of functional languages in that:
+
+      \listing{
+        * command definitions can be read and written focusing only on local process,
+          without taking much care about global state, and
+        * it is easy to ship with strong type system.
+      }%
+
+      This language is designed in a similar way to the functional languages like 
+      \dfn{OCaml} and \dfn{F\#}.
+      The processing system mainly consists of
+
+      \listing{
+        * the frontend that detects inappropriate inputs by users or package developers
+          and reports as an error (like a syntax parser or a type checker), and
+        * the backend that actually typesets the inputs which passed the check by the frontend
+          and outputs a PDF.
+      }%
+    }
+    +p{
+      In addition to implementing such a typesetting system,
+      publishing it as an open source software is also important.
+      The main reasons are
+
+      \listing{
+        * it is considered to be significant that users can use the typesetting system for free,
+          and
+        * the developed typesetting system can be actively improved and extended,
+      }
+
+      the latter of which is essential.
+      With multilingual typesetting in mind,
+      there are so wide variations of functions required for a typesetting system
+      that it is impossible to complete it from every viewpoint by the author himself.
+      The desired environment is such that everyone can read the open-source implementation
+      to understand what process is performed in the internal system,
+      and whenever an improvement is needed, users may actively participate in developing.
+    }
+    +p{
+      It is perhaps almost obvious that building all-round typesetting system
+      at the early stage is unrealistic,
+      as even for the derivatives of \TeX;, 
+      which have been developed and maintained by a number of developers for tens of years,
+      bug fixes and extensions are still worked on.
+      \SATySFi;'s main purpose is to be a foundation of a typesetting system
+      capable of multilingual typesetting,
+      while the immediate goal of the development is to reach a satisfactory mixed typesetting
+      of Japanese and Western languages for practical use,
+      which is personally familiar to the author, a native speaker of Japanese.
+    }
+  >
+  +section{Error reporting}<
+    +p {
+      Now, let us introduce the error report features, along with some examples,
+      that back up user's efficient writing accomplished by \SATySFi;,
+      which was developed by the motivation mentioned above.
+      Supposing that a user tries to obtain the following output,
+      but includes a minor mistake in the input,
+      we will see the difference between the error messages produced by \LaTeX; and \SATySFi;.
+    }
+    % TODO shall we replace with some English verse, or lorem ipsum/
+    +d-block<
+      +p{
+        いろは歌：
+        \fbox{\parbox?:(Top)(5cm)<
+          +p{
+            色は匂へど散りぬるを，吾が世誰ぞ恒ならむ．
+            有為の奥山今日越えて，浅き夢見じ，酔ひもせず．
+          }
+        >}
+      }
+    >
+    +p{
+      First, in case of \LaTeX; (especially we assume p\LaTeX;),
+      the following is a code that compiles to a correct output:
+
+      \d-code(```
+        % -*- coding: utf-8 -*-
+        \documentclass{jsarticle}
+        \usepackage[T1]{fontenc}
+        \usepackage{lmodern}
+        \begin{document}
+          \indent
+            いろは歌：
+            \fbox{\parbox[t]{5cm}{%
+              色は匂へど散りぬるを，吾が世誰ぞ恒ならむ．
+              有為の奥山今日越えて，浅き夢見じ，酔ひもせず．
+            }}
+          \par
+        \end{document}
+      ```);%
+
+      What if the user forgot to specify the width of \codem{\\parbox},
+      so that the 8th line becomes as follows:
+
+      \d-code(```
+        \fbox{\parbox[t]{%
+      ```);%
+
+      Here, p\LaTeX; reports an error at some point for the invalid input,
+      showing the following error message
+      to the standard output (stdout) or the standard error (stderr):
+
+      \console(```
+        ! Argument of \@iiiparbox has an extra }.
+        <inserted text>
+                        \par
+        l.11     }}
+
+        ?
+      ```);%
+
+      Probably, most users can only derive no more information than
+      "something is wrong in the first 11 lines."
+      The error originates from the internal implementation of \codem{\\parbox},
+      and it is not until the process reaches there that
+      the arguments that the user passed do harm and causes such an error message\d---;%
+      in other word, the error is happening at the position where users do never know about,
+      which is so hard to understand.
+    }
+    +p{
+      Similarly, let's take a loot at the error
+      when the user took the optional argument of specifying the height for a required one.
+      Specifically, suppose that the 8th line was mistakenly written as follows.
+
+      \d-code(```
+        \fbox{\parbox{t}{5cm}{%
+      ```);%
+
+      Then the following error message emerges:
+
+      \console(```
+        ! Missing number, treated as zero.
+        <to be read again>
+                           t
+        l.11     }}
+
+        ?
+      ```);%
+
+      Once again, it is in the command implementation that the corruption is revealed,
+      and the user will have no idea what the direct cause is.
+      If the document is small enough, it may be easy to realize soon,
+      but if you are composing a large one, finding the cause is quite a nuisance.
+      In some case, you have to "do a steady binary search while commenting out
+      some of the code you've write to find out the cause."
+    }
+    +p{
+      Now, what will happen if it was done with \SATySFi;?  The following is crucial.
+      First, the \SATySFi; code to obtain the right output is as follows:
+
+      \d-code(```
+        % -*- coding: utf-8 -*-
+        @require: stdjareport
+        @import: local
+
+        document (|
+          title = {Test Document};
+          author = {Takashi SUWA};
+        |) '<
+          +p{
+            いろは歌：
+            \fbox{\parbox?:(Top)(5cm)<
+              +p{
+                色は匂へど散りぬるを，吾が世誰ぞ恒ならむ．
+                有為の奥山今日越えて，浅き夢見じ，酔ひもせず．
+              }
+            >}
+          }
+        >
+      ```);%
+
+      Just to be sure, commands like \codem{\\fbox} and \codem{\\parbox}
+      are named after the \LaTeX;'s correspondents,
+      and implemented only with \SATySFi;'s primitives.
+      We won't explain the details now, but they can be defined as a command as follows:
+
+      \d-code(```
+        let-inline ctx \fbox it =
+          let pads = (2pt, 2pt, 2pt, 2pt) in
+          let t = 0.5pt in
+          let deco (x, y) w h d =
+            [ stroke t Color.black
+                (Gr.rectangle (x, y -' d) (x +' w, y +' h)) ]
+          in
+            inline-frame-inner pads deco (read-inline ctx it)
+
+        type position-spec = Top | Bottom
+
+        let-inline ctx \parbox ?:specopt wid ib =
+          let blockf =
+            match specopt with
+            | None         -> embed-block-top ctx wid
+            | Some(Top)    -> embed-block-top ctx wid
+            | Some(Bottom) -> embed-block-bottom ctx wid
+          in
+            blockf (fun ctx -> read-block ctx ib)
+      ```);%
+
+      Now, what will happen the user did not specify the width for \codem{\\parbox} by mistake?
+      Changing the 13th line as follows:
+
+      \d-code(```
+        \fbox{\parbox?:(Top)<
+      ```);%
+
+      when processed, it is reported to be having an error, whose message will be like:
+
+      \console(```
+        ! [Type Error] at line 13, character 26 to line 16, character 1:
+            this expression has type
+              block-text,
+            but is expected of type
+              length.
+      ```);%
+
+      The error says that an argument of type \type(Type.block-text); is provided
+      from the 26th character in the 13th line,
+      but the actual argument that should be provided there is of \type(Type.length); type,
+      that is, a value that expresses a length.
+      Since the direct cause is obvious, users can instantly correct it according to the error.
+    }
+    +p{
+      Likewise, let's check out the error when an optional argument was mistakenly
+      given as a required argument.
+      Again, if the 13th line was replaced with the following code:
+
+      \d-code(```
+        \fbox{\parbox(Top)(5cm)<
+      ```);%
+
+      here is the error the user will see:
+
+      \console(```
+        ! [Type Error] at line 13, characters 18-23:
+            this expression has type
+              position-spec,
+            but is expected of type
+              length.
+      ```);%
+
+      It claims that an argument of type \type(Type.base-type {position-spec}); is supplied,
+      while the correct type as the required argument is \type(Type.length);.
+      The message is straightforward enough for the user to get down to the correction.
+      Such error reports are done by the type checker
+      judging from the type inferred to the command \codem{\\parbox},
+      and this is definitely the benefit of static typing.
+      As the above account suggests,
+      the usefulness of types assertions is a big advantage of \SATySFi;
+      that is not fulfilled by the existing markup-language style typesetting system.
+    }
+  >
+>
