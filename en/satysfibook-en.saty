@@ -6,7 +6,7 @@
 @import: introduction
 @import: getting-started
 @import: alias-command-definition
-
+@import: page-breaking
 
 document(|
   title = {Unofficial translation of “The \SATySFi;book”};
@@ -44,5 +44,6 @@ document(|
     +section{Simple aliases}< #alias-command-definition; >
 %    +section{プログラミング言語としての\SATySFi;}< #programming; >
   >
+  +chapter?:(`page-breaking`){Page breaking process}< #page-breaking; >
 
 >

@@ -1,0 +1,285 @@
+% -*- coding: utf-8 -*-
+@import: settings
+
+let page-breaking = '<
+  +p{
+    The most difficult part in \SATySFi; mechanism may be page-breaking. 
+    An abstract of the processes itself is merely below\; separating sequences of block-boxed all of contents into appropriate lengths per page.
+    But, to generate good documents is needed page-breaking with procedural processes. 
+    So, this is the essential part to develop \SATySFi;'s class file.
+
+    First, the primitive, that is equivalent to page-breaking is this:
+
+    \val({page-break})(Type.(page --> (tymtausub ${2} --> (tymtausub ${3} --> (block-boxes --> document)))));%
+
+    I'll explain later about \type(Type.(tymtausub ${2})); and \type(Type.(tymtausub ${3}));, because they are too complex to describe now.
+    Anyway, putting the 2nd, the 3rd arguments typed these make the page-breaking interface extremely simple.
+    The 1st argument is paper-size. The 4th argument is the sequence of block-boxes that is target of page-breaking. 
+
+    Type \type(Type.page); is a data-type that is defined as: 
+
+    \d-code(```
+      type page =
+        | A0Paper | A1Paper | A2Paper | A3Paper | A4Paper | A5Paper
+        | USLetter | USLegal
+        | UserDefinedPaper of length * length
+    ```);%
+
+    Constructors like \codem{A4Paper} represent what you imagined
+      \footnote{
+      To be honest, type \type(Type.(product [length; length])); is sufficient to to set paper-size.
+      I should have provided the values like \codem{A4Paper} at package level,
+      but it is not. Because of the (by original text, with word “阿呆な” ) author's fault that of formalized like this at past days.
+      \val({Paper.a4})(Type.(product [length; length]));%
+      Perhaps, type \type(Type.page); will disappear with incompatible change in near future. 
+      }.
+    To short this paragraph maximum roughly, the \codem{page-break} is the primitive.
+    that separates the sequence of block-boxes provided as the 4th argument based on paper-size provided as the 1st argument.
+    The previous line is not satisfying as an explanation of \SATySFi;'s' page-breaking mechanism.
+    From the next paragraphs, I'll describe it step by step.
+  }
+  +p{
+    What you should be note first is type of return value \type(Type.document);.
+    This type does not appear of return value other than the primitive \codem{page-break}.
+    So, to construct value as type \type(Type.document); is allowed only \codem{page-break} substantially. 
+    
+    \SATySFi; wants document file to have type \type(Type.document); with type-checking.
+    There is always \codem{page-break} at class file's bottom\footnote{
+    A class file which wants end-users to write \codem{page-break} directly
+    may not need to contain \codem{page-break}. And you do not have to create the class file usually 
+    }, and constructed sequence of block-boxes based on the information provided by user
+    has a description to process page-breaking.
+    Actually, the function \codem{document} that we wrote to generate document based on the class \pkg{stdjareport} previous is merely function.
+    So, the snippet below is application the function \codem{document}:
+    
+    \d-code(```
+      @require: stdjareport
+
+      document (|
+        (document information)
+      |) '<
+        (content)
+      >
+    ```);%
+    The function \codem{document} has a type below:
+    
+    \quote{
+      \type(Type.(forall-kinded ${\alpha}
+        [
+          ({title}, inline-text);
+          ({author}, inline-text);
+        ]
+        (tymalpha --> (block-text --> document))));
+    }%
+
+    The function receives the 1st argument as record describing title and author,
+    and the 2nd argument as block-text of contents. It returns the value its type 
+    \type(Type.document); at last.
+  }
+  +p{
+    Let me talk about \type(Type.(tymtausub ${2})); I have put off.
+    This is a type below:
+
+    \quote{
+      \type(Type.(
+        record [({page-number}, int)] -->
+          record [({text-height}, length); ({text-origin}, point)]
+      ));
+    }%
+    From this code, you see the 2nd argument provided to \codem{page-break}
+    is a function that receives a record and returns record.
+    This function is called at page-breaking\;
+    determined page contents until the ${\paren{n - 1}} page.
+    Next, this passes a record
+    \codem{(\| page-number = \meta{n}\; \|)}
+    to seek a point of separating contents of the ${n} page from sequence of block-boxes left.
+    Last, the function returns a value to page-breaking process system below:
+    \codem{(\| text-height = \meta{h}\; text-origin = (\meta{x}, \meta{y})\; \|)}
+    The information contain below:
+    \listing{
+      * ${h}：\quad;
+          Length of block-progression direction of contents text-area at the ${n} page.
+      * ${\tuple{|x|y|}}：\quad;
+        Left-top coordinate to position contents actually separated. 
+    }%
+    But, you should take care of difference from axis of graphics\; the${y}-coordinates of ${\tuple{|x|y|}} here is 
+    a value based on the coordinate system where the origin is the left-top of the paper 
+    and the ${+y} axis pointing downward.
+    If you want document pages of same format, having same length of texts from same point on each pages,
+    you can set a function that returns static ${h} and ${\tuple{|x|y|}} not depending on the ${n}.
+    If you want change margins from left to right (general case is binding margins),
+    you can set a function returning values depending on whether ${n} is odd or even. 
+  }
+  +p{
+    Similarly, I also refer to type \type(Type.(tymtausub ${3}));. 
+    
+    The 3rd argument of \codem{page-break} is like below:
+     \quote{
+      \type(Type.(
+        record [({page-number}, int)] -->
+          record [
+            ({header-content}, block-boxes);
+            ({header-origin}, point);
+            ({footer-content}, block-boxes);
+            ({footer-origin}, point);
+          ]
+      ));
+    }%
+    This is a function of type that receives record and returns record, like the 2nd argument.
+    The function set as the 3rd argument of \codem{page-break} with an argument of a record  
+    \codem{(\| page-number = \meta{n}\; \|)}
+    at time where
+    it has been determined contents of ${n}-th page and 
+    completed \*hooking process\* in the page. 
+    
+      \d-codem{
+      (\|
+      \new-line;\quad;
+      header-content = \metasub(${1}){bb}\;
+      header-origin = (\metasub(${1}){x}, \metasub(${1}){y})\;
+      \new-line;\quad;
+      footer-content = \metasub(${2}){bb}\;
+      footer-origin = (\metasub(${2}){x}, \metasub(${2}){y})\;
+      \new-line;
+      \|)
+    }%
+    Then, the function returns record formated above.
+
+    \listing{
+      * Rendering ${bb_1} -- block-boxes -- as header, pointed ${\tuple{|x_1|y_1|}} as left-top.
+      * Rendering ${bb_2} -- block-boxes -- as header, pointed ${\tuple{|x_2|y_2|}} as left-top.
+    }%
+    Please Note the axis of the value. It is as same as the 2nd argument that described in the previous paragraph\;
+    this axis has coordinate origin at left-top. The ${+y}'s positive-direction is to the page bottom.
+    Only \codem{page-break}'s the 2nd and the 3rd arguments use this coordinate system.
+  }
+  +p{
+    Above paragraphs are all specifications of primitive \codem{page-break}.
+    If I added an explanation to them, it is about \*the timing of actual line-breaking\*.
+    Actually, it is not true that \*\codem{page-break} itself does page-breaking\*.
+    When all of document being returned a value
+    as type \type(Type.document);, the page-breaking process gets start. 
+    In other words, a value of type \type(Type.document); is
+    \*frozen\* information about final page-breaking. That page-breaking is not actually processed (yet). 
+    So, there is no process doing actually page-breaking if you added processes that return type of  \type(Type.document);. 
+    Because there is no primitive arranging the value of type \type(Type.document);, 
+    there is no reason to create a value of type \type(Type.document); by \codem{page-break} 
+    without returning contents to output PDF.
+    The possible motivation of doing that is causing \*side-effect\* at page-breaking without using return-value,
+    and you can not do it\footnote{
+      There is no reason you cannot do it.
+      If needed, it sounds good to change the specification what incompatible in the future so that
+      \*\codem{page-break} itself processes a page-breaking\*.}
+    .}
+
++section{primitves related to page-breaking}<
+    +p{
+      There are some primitives for page-breaking related process .
+      Let me introduce them here.
+
+      \val-explain?:(`clear-page`)({clear-page})%
+        (Type.(block-boxes)) {
+          Force page break.
+          If it is inserted in a target that is not broken into pages, 
+          it is equivalent to
+          \codem{block-nil}.
+        }%
+
+      \val-explain?:(`add-footnote`)({add-footnote})%
+        (Type.(block-boxes --> inline-boxes)) {
+          
+          \codem{add-footnote \meta{bb}} inserts block-boxes \codem{\meta{bb}}
+          as footnote.
+          Returned value has type \type(Type.inline-boxes);.
+          Associated with a place inserted this return value, 
+          the footnote position is calculated at the page-breaking process.  
+          The feature as inline-boxes itself is equivalent to \codem{inline-nil}.
+        }%
+
+      \val-explain?:(`hook-page-break`)({hook-page-break})%
+        (Type.(((record [({page-number}, int)] --> (point --> unit))) --> inline-boxes)) {
+          Used as \codem{hook-page-break \meta{f}}.
+          Returned value is inline-boxes.
+          Features in typesetting is equivalent as \codem{inline-nil}.
+          But, a hooking function \codem{\meta{f}} starts
+          it is determined which page the inserted position will be included in.
+          In the case where multiple hook function is embedded at the same page, the function is called in the order of the page's content..
+          If, as the result of page-breaking, inline-boxes which the \*hook\* function is embedded
+          is included at page ${n} and its reference point is ${\tuple{|x|y|}}, then
+          \codem{\meta{f}} is called with
+          \codem{(\| page-number = \meta{n}\; \|)} as 1st argument 
+          and 
+          \codem{(\meta{x}, \meta{y})} as the 2nd argument.
+          You can invoke \*side-effects\* with these argument values
+          like to register cross-reference linking based on page number with \codem{\meta{f}} 's contents.
+      
+        }%
+
+      About thing “To evaluate graphics is triggerd at page-breaking” 
+      written in \ref-chapter(`graphics`); is 
+      as same as this \codem{hook-page-break}.
+      Functions that receives reference point and returns graphics,
+      like the 4th argument of \codem{inline-graphics}, and 
+      hooking functions by \codem{hook-page-break}
+      are evaluated at the same time.
+    }
+  >
++section{Basis of class file}<
+
+  +p{
+    You grasped about page-breaking process.
+    Next, you would get nice idea to create a class file.
+    Then, you may notice you have never think about:\quad;
+    where is \*outermost\* text processing context from?\quad;
+    This is much simple. You can receive by primitives like:
+
+    \val-explain?:(`get-initial-context`)({get-initial-context})%
+    (Type.(length --> (cmdI [math] --> context))){
+      This Returns default text processing context.
+      The 1st argument as a paragraph width,
+      The2nd argument as a command that applying to math equation appeared at inline-text
+      like \codem{set-math-command}.
+    }%
+    \codem{get-initial-context} is only one that is able to set a paragraph width.
+      There is \codem{get-initial-context} in a class file that work as well. 
+      So, transformed text processing context returned by this is used as \*outermost\* text processing context by needs.
+  } 
+
+
+      +example{
+        A definition of “an essentially minimum class file that is more or less able to be used” is like this:
+        
+        \d-code(```
+        let-inline ctx \math m = 
+          script-guard Latin (embed-math ctx m)
+
+        let-block ctx +p it {
+          line-break true true ctx
+            (read-inline ctx it ++ inline-fil)
+
+        let document bt =
+          let ctx = 
+          get-initial-context 440pt (command \math)
+            |> set-dominant-narrow-script Latin
+          in
+          let bb = read-block ctx bt in
+          page-break A4Paper
+            (fun _ -> (|
+              text-origin + (80pt, 100pt);
+              text-height = 630pt;
+            |))
+            (fun _ -> (|
+              header-origin = (0pt, 0pt);
+              header-content = block-nil;
+              footer-origin = (0pt, 0pt);
+              footer-content = block-nil;
+            |))
+            bb
+        ```);
+
+        With this class file,
+        you are able to write document that only has paragraphs with \codem{+p} 
+        as block-text arguments of \codem{document} unless you define new commands.
+      }
+  >
+>
