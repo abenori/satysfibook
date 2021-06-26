@@ -248,54 +248,39 @@ let programming = '<
       More general explanation will be given in \ref-subsection(`functions`);.
     }
     +p{
-      続いては文字列である．文字列の “計算結果” を実際にPDFに出力するため，
-      やはり最初に掲げたテンプレートの段落の部分を\codem{\\show-string}に変えて使おう：
+      Next we discuss on strings.
+      To output “calculation result” of strings to PDF, let us use \codem{\\show-string} in the above template.
 
       \d-code(```
           +p{ Answer: [\show-string(`this is a string`);] }
       ```);%
 
-      この\codem{\`this is a string\`}の部分を色々変えて遊ぶのである．
-      \codem{\\show-string( ${\cdots} )\;}のさらに外側が
-      \codem{\[}と\codem{\]}で囲まれているが，
-      これは単にインラインテキストの一部として書かれた四角括弧の文字で，
-      \codem{\\show-string}によって表示される文字列の
-      端がどこなのかを見やすくするためにつけているだけである．
-      要するに表示させたい文字列値のいずれか一方の端が空白文字であるとき，
-      本当にその端に空白文字が入っているかを確認する目的でつけている．
+      We play with this template by changing \codem{\`this is a string\`} to some other codes.
+      \codem{\[} and \codem{\]} which surrounds \codem{\\show-string( ${\cdots} )\;} is a part of inline-texts and this is just for emphasizing which part is output by \codem{\\show-string}.
+      By this, if the end of the output string is a space, we can check that such a spaces is really output to PDF.
     }
     +p{
-      さて，先走って登場してしまったが，\SATySFi;での文字列リテラルは
-      両端をバッククォート（\codem{\`}）で囲って記述する．
-      多くのプログラミング言語では文字列内容を二重引用符で囲い，
-      キャリッジリターンや二重引用符などいくつかの特殊文字は
-      バックスラッシュでエスケープして書くような方式が採られるが，
-      \SATySFi;にはそのような文字列リテラルの記法はなく，
-      代わりに一切エスケープの要らない
-      バッククォートによるリテラルだけが備わっている．
-      一切エスケープが要らないといっても，
-      「\code(``foo`bar``);」のように
-      バッククォートを文字列内容に含めたい場合はどうすればよいのだろう？\quad;
-      これはMarkdownを書いた経験があれば想像しやすいが，
-      バッククォートが内容に現れる場合は
-      両端のバッククォートを2個ずつにするのである．
-      これにより文字列内容の終端がどこであるかがわかる．
-      試しにテンプレートの段落部分を
+      As I've already introduced, string literals are written with surrounded by back quotes (\codem{\`}) in \SATySFi;.
+      In many programming languages, strings are surrounded by double quotes and special character such as carriage return or double quotes are escaped by the backslash.
+      In \SATySFi; there is no notation for escaping.
+      Instead of this, the literals only with back quotes are provided.
+      How can we include back quote in the strings like “\code(``foo`bar``);”without escaped characters? 
+      If you have an experience to use Markdown, then it may be easy to imagine.
+      So if back quotes are appeared in the strings, you use two back quotes.
+      Then \SATySFi; can recognize the end of the string.
+      Let's try to change our template as follows.
 
       \d-code(```
         +p{ Answer: [\show-string(``foo`bar``);] }
       ```);%
 
-      にしてみると，結果は以下のようになる：
+      Then it gives the following output.
 
       \d-block(open Sample in '<
         +p{ Answer: [\show-string(``foo`bar``);] }
       >);%
-
-      一般化して言うと，
-      文字列内容として ${n} 個隣接したバッククォートを含めたいとき，
-      左右で同数の ${\paren{n + 1}} 個以上の
-      連続したバッククォートで両端を囲めばよい．
+      
+      In general, when you want to use ${n} adjacent back quotes, you can surround the strings by ${n + 1} back quotes.
     }
     +p{
       ここで，良い意味で性格の悪い読者は
