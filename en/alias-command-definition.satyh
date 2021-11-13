@@ -71,7 +71,7 @@ author = {Type set};
     ```);%
 
     Again, notice that you have to use \codem{'\<}, not \codem{\<}.
-    It is awkward, but there is no choice bu to be careful.
+    It is awkward, but there is no choice but to be careful.
     By using this function, for example, the command \codem{+pCde} which makes a paragraph with “Furthermore, I consider that Carthage must be destroyed” at the last part is define as follows.
 
     \d-code(```
