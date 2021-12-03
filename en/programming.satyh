@@ -283,15 +283,10 @@ let programming = '<
       In general, when you want to use ${n} adjacent back quotes, you can surround the strings by ${n + 1} back quotes.
     }
     +p{
-      ここで，良い意味で性格の悪い読者は
-      コーナーケースに気づいたかもしれない：\quad;
-      文字列内容の（少なくとも一方の）
-      端にバッククォートがくる場合はどうすればよいのだろう？\quad;
-      これは簡単で，文字列内容の端がバッククォートの場合は，
-      文字列を括るためのバッククォートの連続と文字列内容の端のバッククォートとの間に
-      空白文字を挿入するとよい．
-      バッククォートで括られた内容は，
-      両末端の空白文字の ${0} 個以上を除去して文字列内容にするのである：
+      The readers who has a bad personality in a godd way may notice some corner cases: If the string contains a backquote at the end, then what we can do?
+      The solution is simple.
+      If the end of the string has a backquote, then one can add a space between a backquote for string literals and a backquote in the string.
+      The spaces at the end of the strings surrounded by backquotes is removed.
 
       \d-code-and-block(```
         +p{ Answer: [\show-string(`` `bar``);] }
@@ -299,16 +294,13 @@ let programming = '<
         +p{ Answer: [\show-string(`` `bar``);] }
       >);%
 
-      たしかに空白文字が除去され，左端がバッククォートになっていることがわかる．
-      さて，読者が次に思うことはもう私にはよくわかっている：\quad;
-      文字列内容の（いずれかの）末端を本当に空白文字にしたい場合はどうすればいいのだろう？\quad;
-      この疑問にもしっかり答えられるので安心してほしい．
-      もし左端の空白文字の ${0} 個以上の連続を無視させたくないのであれば，
-      文字列の括る左側のバッククォートを\codem{\`}ではなく\codem{\#\`}にするのである．
-      バッククォートが2個以上の場合も同様に\codem{\#\`\`}の要領で\codem{\#}を左につける．
-      右端の空白文字の ${0} 個以上の連続を無視させたくない場合も同様に
-      文字列を括る右側を\codem{\`}ではなく\codem{\`\#}とする．
-      バッククォートが2個以上の場合も同様である：
+      You can see that the spaces are removed and the left end of the string is a backquote.
+      I know what you are going to think next: What we can do if a space is at the end of the string?
+      I can answer this question.
+      If you want \SATySFi; not to ignore the more than 0 spaces at the left end of the string, change the left backquotes surronding the string from \codem{\`} to \codem{\#\`}.
+      When using two backquotes, add \codem{\#} as \codem{\#\`\`}.
+      For spaces at the right end of the string, change  the left backquotes surronding the string from \codem{\`} to \codem{\#\`} similary.
+      The way is similar for more than one backquotes.
 
       \d-code-and-block(```
         +p{ Answer: [\show-string(#`` `bar``);] }
@@ -316,13 +308,15 @@ let programming = '<
         +p{ Answer: [\show-string(#`` `bar``);] }
       >);%
 
-      たしかに空白文字が残っている．これでようやく安心して文字列リテラルが使える．
+      You can see that the spaces are not removed.
+      Now you can use string literals freely.
+      %これでようやく安心して文字列リテラルが使える．
     }
     +p{
-      文字列リテラルが書けるようになったところで，文字列を構築する方法を伝授しよう．
-      文字列の結合は2項演算子\codem{^}でできるほか，
-      整数値に評価される式\codem{\meta{expr}}に対し，
-      \codem{(arabic \meta{expr})}で整数値を十進法文字列にすることができる：
+      Now you can write string literals.
+      I will explain how to construct strings.
+      You can concat the strings by the binary operator \codem{^}.
+      The expression \codem{\meta{expr}} evaluted as integers can be changed to decimal strings by \codem{(arabic \meta{expr})}.
 
       \d-code-and-block(```
         +p{ Answer: [\show-string(
@@ -334,27 +328,23 @@ let programming = '<
         );] }
       >);%
 
-      ここで使った\codem{arabic}はやはり函数であり，これに関しては
-      \ref-subsection(`functions`);でしっかりと扱う．
+      \codem{arabic} used here is again a function.
+      This will be explained in \ref-subsection(`functions`); more precisely.
     }
     +p{
-      なお，インラインテキスト\codem{\{ ${\cdots} \}}と
-      文字列は異なる概念であることに注意されたい．
-      前者はコマンドなどを内容に含んでいるが，
-      後者は純粋にUnicodeコードポイント列である．
-      ただし，文字列を
-      （等価なテキストで構成された，コマンドを含まない）インラインテキストへと変換することは
-      \codem{embed-string}という函数で行える．
-      これについても\ref-subsection(`functions`);で扱う．
+      Note that inline-texts \codem{\{ ${\cdots} \}} and strings are not the same.
+      The former contains, for example commands, but the latter is a sequence of unicode points.
+      The strings can be changed to inline-texts (which contains equivalent texts, does not contain commands) by the function \codem{embed-string}.
+      I will explain on it in \ref-subsection(`functions`);, too.
     }
   >
-  +subsection{型システムの基礎}<
+  +subsection{A fundamental on type systems}<
     +p{
-      ところで，“文字列を整数値に足そうとする” とどうなるだろうか？\quad;
-      結論から言うと，そのような計算は意味をなさず，
-      しかも型検査器に弾かれて “計算を試みることさえさせてもらえない”．
-      整数の計算に使った\codem{\\show-int}を含む最初のテンプレートで，
-      試しに以下のように記述して処理してみよう：
+      What will happen if you try to “add a string to an integer”.
+      To say from the conclution, such a calculation does not make sense and “you are not allowed to try to do such a calculation” since the type-checkers reject it.
+      Try the following example using the first template used for the calculation of integers with \codem{\\show-int}:
+%      整数の計算に使った\codem{\\show-int}を含む最初のテンプレートで，
+%      試しに以下のように記述して処理してみよう：
 
       \d-code(```
         +p{ Answer: [\show-int(
@@ -362,7 +352,7 @@ let programming = '<
         );] }
       ```);%
 
-      次のようなエラーが出るはずである：
+      Then you will get the following error.
 
       \console(```
         ! [Type Error] at "test.saty", line 12, characters 9-23:
@@ -372,183 +362,224 @@ let programming = '<
               int.
       ```);%
 
-      ファイル名\code(`test.saty`);や行数などは実際にどう記述したかで変わるのだが，
-      どうであれ実際に\codem{\`added string\`}が書かれている位置を指しているはずだ．
-      上記のエラーは\SATySFi;の型検査器が出した\dfnje{型エラー}{type error}であり，
-      その意味するところは（ほぼ直訳だが）
-      「\codem{\`added string\`}という式は\type(Type.string);型の式だが，
-      ここには\type(Type.int);型の式が書かれることが期待されている」だ．
-      ここでようやく\SATySFi;の特徴たる\dfnje{型}{type}の登場となる\footnote{
-        といっても，プログラミング言語のもつ特徴としては型はごく一般的な概念である．
-        型システムを有していることではなく，
-        型システムを組版処理を行なう処理系に持ち込んだことが
-        \SATySFi;の顕著な特徴なのである．
+      The file name \code(`test.saty`); and the line count is changed depending on how you write the code.
+      Anyway the message points the place where \codem{\`added string\`} is written.
+      The error in the above is the \dfn{type error} raised by the type checker of \SATySFi;.
+%      その意味するところは（ほぼ直訳だが）
+%      「\codem{\`added string\`}という式は\type(Type.string);型の式だが，
+%      ここには\type(Type.int);型の式が書かれることが期待されている」だ．
+      Here the \dfn{type} which is the most noticeable feature of \SATySFi; appears.
+      \footnote{
+        The type is very common as a feature of a programming language.
+        What should be noticed in \SATySFi; is not to have a type system but have a type system with typesetting system.
+%        といっても，プログラミング言語のもつ特徴としては型はごく一般的な概念である．
+%        型システムを有していることではなく，
+%        型システムを組版処理を行なう処理系に持ち込んだことが
+%        \SATySFi;の顕著な特徴なのである．
       }．
-      一旦上のような具体的な型エラーを離れ，型についての一般論の時間にしよう．
-      型とは，非常に大雑把に言えば “値の種類による分類”，さらには
-      “評価した結果どんな種類の値になることが事前にわかっているかに基づく式の分類”
-      である．ここで “事前に” と言っているところが非常に重要だ．
-      要するに，“計算を実際に行なわなくともどんな種類の値が結果として出てくるのかが
-      式の字面%\footnote{より正確には抽象構文木である．}
-      だけからわかる”
-      ような仕組みが型によって確立されているということであり，
-      この仕組みが\dfnje{型システム}{type system}と呼ばれるものだ．
-      型システムを反映して与えられたプログラムが整合しているかどうかを判定する機構が
-      型検査器であり，この “整合しているかの検査” は
-      プログラムをなす各部分の式に型がつくかどうかを判定することで行なわれる．
+      Once I leave such a concrete type error, I will discuss the general theory of types.
+%      一旦上のような具体的な型エラーを離れ，型についての一般論の時間にしよう．
+      Types are, roughly speaking, “a classification by kinds of values”, or “a classification of expressions by kinds of evaluated values which we can know before”.
+%      型とは，非常に大雑把に言えば “値の種類による分類”，さらには
+%      “評価した結果どんな種類の値になることが事前にわかっているかに基づく式の分類”
+      It is important that we can know a kind of evaluated value “before” evaluation.
+%      である．ここで “事前に” と言っているところが非常に重要だ．
+%      要するに，“計算を実際に行なわなくともどんな種類の値が結果として出てくるのかが
+%      式の字面%\footnote{より正確には抽象構文木である．}
+%      だけからわかる”
+      Namely one can know a kind of evaluated value only reading an appearance of expressions\footnote{It is an abstract syntax tree, more precisely.} without real evaluation.
+%      ような仕組みが型によって確立されているということであり，
+      This is a \dfn{type system}.
+      The type checker checks consistency of a program by types.
+      It checks a program by giving a type to each expression of a program.
     }
     +p{
-      式に型をつけることの直観は単純である．
-      まず，整数値の型として（上の型エラーにも出てきたように）
-      \type(Type.int);型が用意されている．
-      最初から値であるような\codem{1}とか\codem{2}とか\codem{500000000}といった
-      整数リテラルの式は単純にそのまま\type(Type.int);型がつけられる．
-      重要なのは，まだ値でない，評価すると “何かしら計算が進む” 式の型つけだ．
-      例えば，加算の式\codem{\metasub(${1}){expr} + \metasub(${2}){expr}}は
-      どのように型で扱うかというと，
-      「\codem{\metasub(${1}){expr} + \metasub(${2}){expr}}に何らかの型がつくなら
-      それは\type(Type.int);型であり，そのためには
-      \codem{\metasub(${1}){expr}}と
-      \codem{\metasub(${2}){expr}}にそれぞれ\type(Type.int);型がつかねばならない」
-      という規則が設けられているのである．
-      これが型システムという仕組みの大枠だ．
-      本当はもう少し一般性の高い仕組みなのだが，それは次節での函数の型つけの説明に譲る．
+      Intuitively it is easy to give a type.
+      We have a type \type(Type.int); as a type of integers (as appearing in the above type error).
+      The integer literal expressions which is a value without an evaluation, such as \codem{1}, \codem{2} and \codem{500000000} has a type \type(Type.int);
+      Mover important thing is how to give a type to an expression “which will be calculated” after evaluation.
+      For example, an expression of addition \codem{\metasub(${1}){expr} + \metasub(${2}){expr}} is treated by a type system as follows: There is a rule that “if \codem{\metasub(${1}){expr} + \metasub(${2}){expr}} has a certain type, then it should be a type \type(Type.int); and both \codem{\metasub(${1}){expr}} and \codem{\metasub(${2}){expr}} should have a type \type(Type.int);.”
+      This is a rough framework of a type system.
+      Actually, this is more general framework.
+      I will explain on it in the next subsection where I will explain how to give types to functions.
+%      本当はもう少し一般性の高い仕組みなのだが，それは次節での函数の型つけの説明に譲る．
     }
     +p{
-      さて，上で出た型エラーの話に戻る．
-      このエラーの要因は，要するに
-      \codem{\metasub(${1}){expr} + \metasub(${2}){expr}}という形の式に型をつけるには
-      上記の説明どおり\codem{\metasub(${1}){expr}}と
-      \codem{\metasub(${2}){expr}}のそれぞれに
-      \type(Type.int);型がつくことが要請されるのだが，
-      ここでは\codem{\metasub(${2}){expr}}が\codem{\`added string\`}という
-      文字列リテラルであり，
-      これは（\type(Type.string);型はつくが）
-      \type(Type.int);型がつかないと定められている．
-      したがって元の加算の式全体には型がつかないことになり，型検査で弾かれるのである．
+      Now we go back to a type error before.
+      The reason for the error is, to give a type to \codem{\metasub(${1}){expr} + \metasub(${2}){expr}}, we have to give a type \type(Type.int); to \codem{\metasub(${1}){expr}} and \codem{\metasub(${2}){expr}} as explained before.
+      However \codem{\metasub(${2}){expr}} is \codem{\`added string\`} which is a string literal.
+      Hence it does not have \type(Type.int); (It can have a type \type(Type.string);.)
+      Therefore one can not give a type to the expression of the addition and the type checker rejects it.
     }
   >
-  +subsection?:(`length`){長さ}<
+  +subsection?:(`length`){Length}<
     +p{
-      型システムの基礎を把握してもらったところで，
-      組版処理上基礎的なデータのひとつである\dfnje{長さ}{length}と
-      その型である\type(Type.length);型を紹介しよう．
-      これはおそらく汎用のプログラミング言語には
-      それ以上分解できない機能として搭載されているのをまず見ない
-      データだろう．
-      長さの値は振舞いの上ではほぼ浮動小数点数のようなものではある\footnote{
-        現状，長さに関する演算がどのように振舞うかは厳密には規定しない．
-        厳密に規定しなければどのように行分割されるかが “処理系依存” になってしまうので
-        将来的には規定した方が望ましいのであろうが，
-        今のところ公開されている\SATySFi;の処理系は
-        著者が実装した1つ（およびそれを他者がforkし長さの扱いに関係しない箇所を改変したもの）
-        しかないと思われるのでひとまず気にしなくてよい．
-        なお，現在の処理系の実装では（後述する）DTPポイント単位の
-        浮動小数点数で内部的に表現されている．
-      }が，
-      “長さ同士を乗算したものを長さとして使う” といった
-      “意味をなさない計算” が安易にはできないように，
-      つまりそういった計算をしようとする記述が型検査を通らないように，
-      浮動小数点数とは型の上で区別されている．
-      長さの定数リテラルは，\codem{2.5cm}とか\codem{-1inch}といった，
-      次に該当する構文で書く：
-
+      As you have understood a basic things of the type system, let us look at a \dfn{length} and its type \type(Type.length); which is one of a basic data type in typesetting process.
+      This is probably data type that you rarely see included in general-purpose programming languages as a feature that cannot be broken down any further.
+      As the behavior, the length value is almost like floating-point numbers\footnote{
+        Currently, there is no strict specification of how length-related operations should behave.
+        If it is not strictly specified, how the lines are broken will be “processor dependent”.
+        In the future, it may be better to specify the behavior.
+        However, for now, there is only available implementation for \SATySFi; is the one implemented by the author (and the ones forked by others and modified the parts not related to the length handling).
+        Therefore we are not concerned about it.
+        In the current implementation, the length is internally expressed as a floating-point number in DTP points (see below).
+      }, but to prevent “meaningless calculations” such as “multiplying lengths by each other and use the result as the length” cannot be easily performed
+      Namely, the Floating-point numbers are distinguished from floating-point numbers in terms of type not to pass such a calculation.
+      A constant length literal is written as \codem{2.5cm}, \codem{-1inch}, etc as the following syntax:
+%      型システムの基礎を把握してもらったところで，
+%      組版処理上基礎的なデータのひとつである\dfnje{長さ}{length}と
+%      その型である\type(Type.length);型を紹介しよう．
+%      これはおそらく汎用のプログラミング言語には
+%      それ以上分解できない機能として搭載されているのをまず見ない
+%      データだろう．
+%      長さの値は振舞いの上ではほぼ浮動小数点数のようなものではある\footnote{
+%        現状，長さに関する演算がどのように振舞うかは厳密には規定しない．
+%        厳密に規定しなければどのように行分割されるかが “処理系依存” になってしまうので
+%        将来的には規定した方が望ましいのであろうが，
+%        今のところ公開されている\SATySFi;の処理系は
+%        著者が実装した1つ（およびそれを他者がforkし長さの扱いに関係しない箇所を改変したもの）
+%        しかないと思われるのでひとまず気にしなくてよい．
+%        なお，現在の処理系の実装では（後述する）DTPポイント単位の
+%        浮動小数点数で内部的に表現されている．
+%      }が，
+%      “長さ同士を乗算したものを長さとして使う” といった
+%      “意味をなさない計算” が安易にはできないように，
+%      つまりそういった計算をしようとする記述が型検査を通らないように，
+%      浮動小数点数とは型の上で区別されている．
+%      長さの定数リテラルは，\codem{2.5cm}とか\codem{-1inch}といった，
+%      次に該当する構文で書く：
       \d-codem{
-        \meta-or{|-||}\meta-or{|〈非負で数値の浮動小数点数〉|〈非負整数〉|}〈単位〉
+        \meta-or{|-||}\meta-or{|〈non-negative floating number〉|〈non-negative integer〉|}〈unit〉
       }%
 
-      ただし，\codem{〈単位〉}の部分は変数名と同一の規則の文字列である．
-      これ全体が長さの定数リテラルをなす1トークンであり，
-      負の符号と数値部分の間や数値部分と単位の間に空白文字を入れたりしてはいけない．
-      具体的な単位については，あらかじめ定義された以下の
-      （“状況” に依存しない，絶対的な）単位のみが使える：
+      Here the \codem{unit} part is a string with the same rules as the variable name.
+      This whole thing is a single token that forms a constant literal of length.
+      There should not be any spaces between the negative sign and the numeric part, or between the numeric part and the unit.
+      The following pre-defined (absolute, independent of the "situation") are allowed as concrete units.
+%      ただし，\codem{〈単位〉}の部分は変数名と同一の規則の文字列である．
+%      これ全体が長さの定数リテラルをなす1トークンであり，
+%      負の符号と数値部分の間や数値部分と単位の間に空白文字を入れたりしてはいけない．
+%      具体的な単位については，あらかじめ定義された以下の
+%      （“状況” に依存しない，絶対的な）単位のみが使える：
 
       \listing{
         * \codem{mm}：\quad;
-          ミリメートル
+%          ミリメートル
+          millimeter
 
         * \codem{cm}：\quad;
-          センチメートル
+%          センチメートル
+          centimeter
 
         * \codem{inch}：\quad;
-          \dfnje{国際インチ}{international inch}（${1\math-unit!{inch}}を
-          厳密に${2.54\math-unit!{cm}}と定めた単位）
+          \dfn{international inch} (a unit that strictly defines ${1\math-unit!{inch}} as ${2.54\math-unit!{cm}}.)
+%          \dfnje{国際インチ}{international inch}（${1\math-unit!{inch}}を
+%          厳密に${2.54\math-unit!{cm}}と定めた単位）
 
         * \codem{pt}：\quad;
-          \dfnje{DTPポイント}{DTP point}（${1\math-unit!{pt}}を
-          厳密に${\paren{1/72}\math-unit!{inch}}と定めた単位）
+          \dfn{DTP point}(${1\math-unit!{pt}}) (a unit that strictly defines ${1\math-unit!{pt}} as ${\paren{1/72}\math-unit!{inch}}.)
+%          \dfnje{DTPポイント}{DTP point}（${1\math-unit!{pt}}を
+%          厳密に${\paren{1/72}\math-unit!{inch}}と定めた単位）
       }%
 
-      emやexなどといった，“現在の文字サイズ” に依存する
-      相対的な長さの単位は使えないことに注意されたい．
-      勿論実質的にem単位で長さを指定する方法は存在し，
-      それについては後々わかることになる\footnote{
-        大幅に先走って述べておくと，そのような処理は
-        \codem{get-font-size}というプリミティヴを用いて実現する．
-      }．
-      さらに引っかかりやすいポイントは，ポイントという単位の定義だ．
-      “point” と呼ばれる単位には歴史的に様々な定義が与えられてきた．
-      代表的なものを掲げる：
-
+      Note that you cannot use relative length units such as em or ex, which depend on the “current font size”.
+      Of course, there is a way to specify the length as em units practically, which will be explained later\footnote{Speaking very ahead of time, such a process is achieved using the primitive \codem{get-font-size}}.
+%      emやexなどといった，“現在の文字サイズ” に依存する
+%      相対的な長さの単位は使えないことに注意されたい．
+%      勿論実質的にem単位で長さを指定する方法は存在し，
+%      それについては後々わかることになる\footnote{
+%        大幅に先走って述べておくと，そのような処理は
+%        \codem{get-font-size}というプリミティヴを用いて実現する．
+%      }．
+      A more tricky point is the definition of the unit “point”.
+      Historically, the unit called “point” has been given many different definitions.
+      Here are some of the most common definitions:
+%      さらに引っかかりやすいポイントは，ポイントという単位の定義だ．
+%      “point” と呼ばれる単位には歴史的に様々な定義が与えられてきた．
+%      代表的なものを掲げる：
       \listing{
-        * \dfnje{Didotポイント}{Didot’s point}（1783年）：\quad;
-          pied du Roi（royal foot，王のフィート）に基づくフランスのインチの厳密に${\paren{1/72}}倍．
+        * \dfn{Didot’s point }(1783): \quad;
+          Exactly ${\paren{1/72}} times the French inch based on the pied du Roi (royal foot).
+%        * \dfnje{Didotポイント}{Didot’s point}（1783年）：\quad;
+%          pied du Roi（royal foot，王のフィート）に基づくフランスのインチの厳密に${\paren{1/72}}倍．
 
-        * アメリカンポイント（1886年）：\quad;
-          インチの厳密に${0.013837}倍．
+        * American Point (1886): \quad;
+          Exactly ${0.013837} times inch.
+%        * アメリカンポイント（1886年）：\quad;
+%          インチの厳密に${0.013837}倍．
 
-        * JIS Z 8305に基づくもの（1962年）：\quad;
-          厳密に${0.3514\math-unit!{mm}}．
+        * Based on JIS Z 8305 (1962): \quad;
+          Exactly ${0.3514\math-unit!{mm}}
+%        * JIS Z 8305に基づくもの（1962年）：\quad;
+%          厳密に${0.3514\math-unit!{mm}}．
 
-        * \TeX;ポイント\code(`pt`);（1982年）：\quad;
-          国際インチの厳密に${\paren{1/72.27}}倍．
+        * \TeX; points \code(`pt`); (1982): \quad;
+          Exactly ${\paren{1/72.27}} times international inch.
+%        * \TeX;ポイント\code(`pt`);（1982年）：\quad;
+%          国際インチの厳密に${\paren{1/72.27}}倍．
 
-        * \TeX;でのDidotポイント\code(`dd`);（1964年）：\quad;
-          \TeX;ポイントの厳密に${\paren{1157/1238}}倍．
+        * Didot points in \TeX; \code(`dd`); (1964): \quad;
+          Exactly ${\paren{1157/1238}} times the \TeX; point.
+%        * \TeX;でのDidotポイント\code(`dd`);（1964年）：\quad;
+%          \TeX;ポイントの厳密に${\paren{1157/1238}}倍．
 
-        * DTPポイント（1984年）：\quad;
-          国際インチの厳密に${\paren{1/72}}倍．
-          \dfn{PostScript} \cite[`PostScript`];
-          の仕様で導入され，\dfnje{PostScriptポイント}{PostScript point}とも呼ばれる．
-          CSSで扱われる\code(`pt`);，および
-          \TeX;の\dfnje{ビッグポイント}{big point} \code(`bp`);も，
-          これに等しい\footnote{
-            ただし，\TeX;での長さの扱いは
-            \dfnje{スケールドポイント}{scaled point} \code(`sp`);
-            という\TeX;ポイントの厳密に ${\paren{1/65536}}倍の長さの整数倍として表現され，
-            ビッグポイントも\TeX;ポイントの
-            厳密に ${\paren{65781/65536}}倍として扱われているので，
-            定義と実装で差がある．
-            といっても\code(`sp`);は ${10^{-6}\math-unit!{mm}}のオーダーなので，
-            視覚表現上はこの単位に対する丸め誤差を気にする必要がない．
-          }．
-
+        * DT poit (1984): \quad;
+          Exactly ${\paren{1/72}} times the international inch.
+          It is introduced in the \dfn{PostScript} \cite[`PostScript`]; specification, which is also called \dfn{PostScript point}.
+          \code(`pt`); in CSS, and \dfn{big point} \code(`bp`); in \TeX; are also the same as this\footnote{
+            However, the length in \TeX; is expressed as an integer multiple of \dfn{scaled point}\code(`sp`); which is exactly ${\paren{1/65536}} times the length of the \TeX; point, and the big point is also treated as exactly ${\paren{65781/65536}} times the length of the \TeX; point.
+            Hence there is a difference between the definition and the implementation.
+            However, since \code(`sp`); is on the order of ${10^{-6}\math-unit!{mm}}, there is no need to worry about rounding error for this unit in visual representation.
+          }.
+%        * DTPポイント（1984年）：\quad;
+%          国際インチの厳密に${\paren{1/72}}倍．
+%          \dfn{PostScript} \cite[`PostScript`];
+%          の仕様で導入され，\dfnje{PostScriptポイント}{PostScript point}とも呼ばれる．
+%          CSSで扱われる\code(`pt`);，および
+%          \TeX;の\dfnje{ビッグポイント}{big point} \code(`bp`);も，
+%          これに等しい\footnote{
+%            ただし，\TeX;での長さの扱いは
+%            \dfnje{スケールドポイント}{scaled point} \code(`sp`);
+%            という\TeX;ポイントの厳密に ${\paren{1/65536}}倍の長さの整数倍として表現され，
+%            ビッグポイントも\TeX;ポイントの
+%            厳密に ${\paren{65781/65536}}倍として扱われているので，
+%            定義と実装で差がある．
+%            といっても\code(`sp`);は ${10^{-6}\math-unit!{mm}}のオーダーなので，
+%            視覚表現上はこの単位に対する丸め誤差を気にする必要がない．
+%          }．
+%
 
       }%
 
-      CSS，PostScript，PDF（および，\code(`bp`);という単位だが，\TeX;）
-      などに広くまたがって互換性に優れた
-      デファクトスタンダードとして確立されていることを鑑み，
-      \SATySFi;は\codem{pt}の定義としてDTPポイントを採用した．
+      We adopted DTP points as the definition of \codem{pt} as it has been established as the de facto standard for compatibility across CSS, PostScript, PDF (and \code(`bp`); units, but \TeX;), etc.
+%      CSS，PostScript，PDF（および，\code(`bp`);という単位だが，\TeX;）
+%      などに広くまたがって互換性に優れた
+%      デファクトスタンダードとして確立されていることを鑑み，
+%      \SATySFi;は\codem{pt}の定義としてDTPポイントを採用した．
     }
     +p{
-      長さに関する基礎的な演算を行なう式は次のとおりである：
+      The expressions for basic calculations on length is as follows:
+%      長さに関する基礎的な演算を行なう式は次のとおりである：
 
       \listing{
         * \codem{\metasub(${1}){l} +' \metasub(${2}){l}}：\quad;
-          長さ同士の加算．
+          addition of lengths.
+%          長さ同士の加算．
 
         * \codem{\metasub(${1}){l} -' \metasub(${2}){l}}：\quad;
-          長さ同士の減算．
+          Subtraction of lengths.
+%          長さ同士の減算．
 
         * \codem{\meta{l} \*' \meta{r}}：\quad;
-          長さ\codem{\meta{l}}と浮動小数点数\codem{\meta{r}}を受け取り，
-          \codem{\meta{l}}を\codem{\meta{r}}倍した長さを返す．
+          It takes the length \codem{\meta{l}} and the floating point number \codem{\meta{r}}, and returns the length of \codem{\meta{l}} multiplied by \codem{\meta{r}}.
+%          長さ\codem{\meta{l}}と浮動小数点数\codem{\meta{r}}を受け取り，
+%          \codem{\meta{l}}を\codem{\meta{r}}倍した長さを返す．
 
         * \codem{\metasub(${1}){l} /' \metasub(${2}){l}}：\quad;
-          長さ\codem{\metasub(${1}){l}}が
-          長さ\codem{\metasub(${2}){l}}の
-          “何倍の長さであるか” の浮動小数点数を返す．
+          Returns a floating-point number that is “how many times” the length \codem{\metasub(${1}){l}} is greater than the length \codem{\metasub(${2}){l}}.
+%          長さ\codem{\metasub(${1}){l}}が
+%          長さ\codem{\metasub(${2}){l}}の
+%          “何倍の長さであるか” の浮動小数点数を返す．
       }%
     }
   >
@@ -1211,7 +1242,7 @@ let programming = '<
       ここまでに紹介した言語機能を用いて長方形と円を一緒に扱うナイーヴな方法のひとつは，
       \type(Type.(product [string; length; length; length; length]));
       という型のタプルを用いる方法だ．
-      ${\tuple{|x_1|y_1|}} と ${\tuple{|x_2|y_2|}} とが対角線をなす長方形は
+      ${\tuple{|x_{1}|y_{1}|}} と ${\tuple{|x_{2}|y_{2}|}} とが対角線をなす長方形は
       \codem{(\`rectangle\`, \metasub(${1}){x}, \metasub(${1}){y},
         \metasub(${2}){x}, \metasub(${2}){y})}
       で，
@@ -1244,7 +1275,7 @@ let programming = '<
       この定義は，新たに定義する\type(Type.(base-type {geometry}));型に於いて
 
       \listing{
-        * ${\tuple{|x_1|y_1|}} と ${\tuple{|x_2|y_2|}} とが対角線をなす長方形は
+        * ${\tuple{|x_{1}|y_{1}|}} と ${\tuple{|x_{2}|y_{2}|}} とが対角線をなす長方形は
           \codem{Rectangle((\metasub(${1}){x}, \metasub(${1}){y}),
             (\metasub(${2}){x}, \metasub(${2}){y}))}
           という形で扱われる
