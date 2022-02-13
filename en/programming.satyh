@@ -585,33 +585,44 @@ let programming = '<
   >
   +subsection?:(`functions`){函数定義}<
     +p{
-      大抵のプログラミング言語には，頻出する計算手順に名前をつけ，
-      その計算手順を1箇所にまとめて記述する方法が備わっている．
-      多くの言語と同様に，\SATySFi;では\dfnje{函数}{function}がその役割を担う\footnote{
-        函数のほかには，\dfn{Fortran90}などの言語に見られるように
-        \dfnje{サブルーティン}{subroutine}と呼ばれる機構がこの役割を担っている言語もある．
-      }．
-      函数は，何らかの値を受け取り，それを加工して新たな値をつくる処理である．
-      例として，円単位の金額を整数で受け取り，
-      それをドル単位に換算する函数\codem{to-dollar}を定義してみよう．
-      レートはひとまず9月24日19時23分(UTC)に基づいて${1}ドルを${112.73}円とする．
-      これは以下のようにして定義できる：
+      %大抵のプログラミング言語には，頻出する計算手順に名前をつけ，
+      %その計算手順を1箇所にまとめて記述する方法が備わっている．
+      Most programming languages have a way of naming computational procedures occurring frequently and writing them in one place. 
+      %多くの言語と同様に，\SATySFi;では\dfnje{函数}{function}がその役割を担う\footnote{
+      %  函数のほかには，\dfn{Fortran90}などの言語に見られるように
+      %  \dfnje{サブルーティン}{subroutine}と呼ばれる機構がこの役割を担っている言語もある．
+      %}．
+      As in many languages, \dfn{function} has that role with \SATySFi;\footnote{
+        In addition to the function, as seen in languages such as \dfn{Fortran90}, some languages have a mechanism called \dfn{subroutine} that has this role.
+      }.
+      %函数は，何らかの値を受け取り，それを加工して新たな値をつくる処理である．
+      Functions are procedures which takes some values, processes it and make a new value.
+      %例として，円単位の金額を整数で受け取り，
+      %それをドル単位に換算する函数\codem{to-dollar}を定義してみよう．
+      As an example, let define a functiorn \codem{to-dollar} which takes an ammount in yesn as an integers and converts it to dollers.
+      %レートはひとまず9月24日19時23分(UTC)に基づいて${1}ドルを${112.73}円とする．
+      The rate is with ${1} dollar being ${112.73} yen, based on 19:23 (UTC), September 24.
+      %これは以下のようにして定義できる：
+      This can be defined as follows.
 
       \d-code(```
         let to-dollar m-yen =
           let rate = 112.73 in
             (float m-yen) /. rate
         in
-        （続きの式）
+          (continuation expression)
       ```);%
 
-      函数の定義もlet式を用いて行なうのである．
-      ここで登場する\codem{m-yen}は\dfn{仮引数}
-      または単に\dfn{引数}と呼ばれるもので，
-      函数\codem{to-dollar}の受け取る値が格納される変数である．
-      ここで例示した\codem{to-dollar}はひとつだけ引数をとる函数だが，
-      一般には任意に正整数個とれる．
-      函数定義は，次のような構文によって為される：
+      % 函数の定義もlet式を用いて行なうのである．
+      We define the functions using let-expression.
+      % ここで登場する\codem{m-yen}は\dfn{仮引数}
+      % または単に\dfn{引数}と呼ばれるもので，
+      % 函数\codem{to-dollar}の受け取る値が格納される変数である．
+      \codem{m-yen} appearing here is called \dfn{formal argument} or \dfn{parameter} and is a variable which stores the value received by the function \codem{to-dollar}.
+      % ここで例示した\codem{to-dollar}はひとつだけ引数をとる函数だが，
+      % 一般には任意に正整数個とれる．
+      The example shown here, \codem{to-dollar}, is a function that takes only one argument. In general, it can take any number of positive integers.      % 函数定義は，次のような構文によって為される：
+      You can define the functions by the following syntax:
 
       \d-codem{
         let \meta{f} \metasub(${1}){x} ${\cdots} \metasub(${n}){x} =
@@ -620,13 +631,17 @@ let programming = '<
           \metasub(${2}){expr}
       }%
 
-      \codem{\meta{f}}が定義したい函数に与える名前であり，
-      各\codem{\metasub(${i}){x}}は第 ${i} 引数である．
+      %\codem{\meta{f}}が定義したい函数に与える名前であり，
+      %各\codem{\metasub(${i}){x}}は第 ${i} 引数である．
+      \codem{\meta{f}} is a name of the function which you want to define and each \codem{\metasub(${i}){x}} is the ${i}-th parameter.
     }
     +p{
-      さて，上で定義した函数\codem{to-dollar}を実際に使ってみよう．
-      函数の定義は，パッケージの読み込みの記述から\codem{document}までの間の部分で行なえる．
-      すなわち，以下のようになる：
+      %さて，上で定義した函数\codem{to-dollar}を実際に使ってみよう．
+      Let's try to use the function \codem{to-dollar} defined above in practice.
+      %函数の定義は，パッケージの読み込みの記述から\codem{document}までの間の部分で行なえる．
+      The definition of the function can be done in the part between the loading packages and \codem{document}.
+      % すなわち，以下のようになる：
+      That is, we have the following.
 
       \d-code(```
         @require: stdjareport
@@ -645,59 +660,83 @@ let programming = '<
           （以降略）
       ```);%
 
-      それでは実際に\codem{to-dollar}を使って円単位の金額をドル単位に換算してみよう．
-      函数\codem{\meta{f}}に式\codem{\meta{expr}}の計算結果を渡したいときは
-      \codem{\meta{f} \meta{expr}}と書く．
-      これを函数\codem{\meta{f}}の式\codem{\meta{expr}}への\dfnje{適用}{application}
-      とか式\codem{\meta{expr}}による函数\codem{\meta{f}}の\dfnje{呼び出し}{call}
-      と呼ぶ．また，ここで評価結果が\codem{\meta{f}}に渡される式\codem{\meta{expr}}のことを
-      \codem{\meta{f}}の\dfn{実引数}と呼ぶ．
-      やや厄介なことに，仮引数だけでなくこの実引数も単に\dfn{引数}と呼ばれることが多い．
-      しかし「引数」が仮引数の意であるか実引数の意であるかは
-      ほとんどの場合使用されている文脈から判断できるので，
-      特に違いを強調する必要のない場合は両者ともに引数と書くことにする．
+      % それでは実際に\codem{to-dollar}を使って円単位の金額をドル単位に換算してみよう．
+      Let's try to convert yen amounts into dollars using \codem{to-dollar}.
+      % 函数\codem{\meta{f}}に式\codem{\meta{expr}}の計算結果を渡したいときは
+      % \codem{\meta{f} \meta{expr}}と書く．
+      When you want to pass the result of calculation of the expression \codem{\meta{expr}} to the function \codem{\meta{f}}, you write \codem{\meta{f} \meta{expr}}.
+      %これを函数\codem{\meta{f}}の式\codem{\meta{expr}}への\dfnje{適用}{application}
+      %とか式\codem{\meta{expr}}による函数\codem{\meta{f}}の\dfnje{呼び出し}{call}
+      %と呼ぶ．
+      This is called an \dfn{application} of the function \codem{\meta{f}} to the expression \codem{\meta{expr}} or a \dfn{call} of the function \codem{\meta{f}} by the expression \codem{\meta{expr}}.
+      %また，ここで評価結果が\codem{\meta{f}}に渡される式\codem{\meta{expr}}のことを
+      %\codem{\meta{f}}の\dfn{実引数}と呼ぶ．
+      Also, the expression which the evaluation result is passed to \codem{\meta{f}} is called an \dfn{argument} of \codem{\meta{f}}.
+      % やや厄介なことに，仮引数だけでなくこの実引数も単に\dfn{引数}と呼ばれることが多い．
+      Somewhat annoyingly, this argument as well as a formal argument is often referred to simply as \dfn{parameter}.
+      % しかし「引数」が仮引数の意であるか実引数の意であるかは
+      % ほとんどの場合使用されている文脈から判断できるので，
+      % 特に違いを強調する必要のない場合は両者ともに引数と書くことにする．
+      However, whther the "parameter" means a formal argument or an argument can be determined from the context in most cases, both are written as parameters when we do not need to emphasis the differences.
+      %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+      % よくわからないので引数→parameter，仮引数→formal argument，実引数→argumentとしてみた．後で調べる．
+      %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     }
     +p{
-      函数\codem{\meta{f}}の式\codem{\meta{expr}}への適用は，次のような流れで評価される：
+      % 函数\codem{\meta{f}}の式\codem{\meta{expr}}への適用は，次のような流れで評価される：
+      The application of the function \codem{\meta{f}} to \codem{\meta{expr}} is evaluated in the following flow:
 
       \listing{
-        * 実引数\codem{\meta{expr}}が評価されて値\codem{\meta{value}}になる．
+        %* 実引数\codem{\meta{expr}}が評価されて値\codem{\meta{value}}になる．
+        * The argument is evaluated and becoms the value \codem{\meta{value}}.
 
-        * 函数\codem{\meta{f}}の定義
-          \codem{let \meta{f} \meta{x} = \meta{e} in ${\cdots}}
-          が “思い返される”．
+        %* 函数\codem{\meta{f}}の定義
+        %  \codem{let \meta{f} \meta{x} = \meta{e} in ${\cdots}}
+        %  が “思い返される”．
+        * THe definition of the function \codem{\meta{f}} \codem{let \meta{f} \meta{x} = \meta{e} in ${\cdots}} is “recalled”.
 
-        * 仮引数\codem{\meta{x}}が\codem{\meta{value}}に束縛された下で
-          “定義の本体” である式\meta{e}が評価され，その結果が適用の式全体の評価結果となる．
+        %* 仮引数\codem{\meta{x}}が\codem{\meta{value}}に束縛された下で
+        %  “定義の本体” である式\meta{e}が評価され，その結果が適用の式全体の評価結果となる．
+        * The expression \meta{e} which is the “body of the definition” is evaluated under the constraint that the formal argument \codem{\meta{x}} is binded to \codem{\meta{value}}
+        and the result is the result of the evaluation of the entire expression.
       }%
 
-      不正確ながら大雑把に言ってしまえば，
-      函数定義中の仮引数が実引数で置き換えられたものを計算するのが函数適用である．
-      さて，実際に\codem{to-dollar}を適用したのが以下だ：
-
+      % 不正確ながら大雑把に言ってしまえば，
+      % 函数定義中の仮引数が実引数で置き換えられたものを計算するのが函数適用である．
+      To put it roughly but inaccurately, the application of a function is to compute the substitution of arguments for formal argument in a definition of a function.
+      % さて，実際に\codem{to-dollar}を適用したのが以下だ：
+      The actual application of \codem{to-dollar} is as follows:
+      
       \d-code-and-block(```
         +p{ Answer: \show-float(to-dollar 10000); }
       ```)(open Sample in '<
         +p{ Answer: \show-float(to-dollar 10000); }
       >);%
 
-      やはり大雑把に言えば，\codem{to-dollar}の “定義本体” の中の\codem{m-yen}がすべて
-      \codem{10000}に置き換わったものの計算結果が出ているわけである．
-      というわけで10000円は大体88.7ドルくらいであることが計算できた．
+      %やはり大雑把に言えば，\codem{to-dollar}の “定義本体” の中の\codem{m-yen}がすべて
+      %\codem{10000}に置き換わったものの計算結果が出ているわけである．
+      Roughly speaking again, the result of calculations of the "definition body" of \codem{to-dollar} replacing all of the \codem{m-yen} with \codem{10000} is obtained.
+      
+      % というわけで10000円は大体88.7ドルくらいであることが計算できた．
+      So we can calculate that 10000yen is about 88.7 dollers.
     }
     +p{
-      函数それ自体にも，整数などと同様に型がつけられる．
-      \type(Type.tymtausub ${1});型の引数をとって
-      \type(Type.tymtausub ${2});型の値を返す函数には
-      \type(Type.(tymtausub ${1} --> tymtausub ${2}));
-      という型がつくと定められている．
-      例えば，上で定義した\codem{to-dollar}は
-      \type(Type.(int --> float));型をもつ．
-      このことを以降
+      % 函数それ自体にも，整数などと同様に型がつけられる．
+      Then function itself has, like integers, types.
+      %\type(Type.tymtausub ${1});型の引数をとって
+      %\type(Type.tymtausub ${2});型の値を返す函数には
+      % \type(Type.(tymtausub ${1} --> tymtausub ${2}));
+      %という型がつくと定められている．
+      The type of the function which takes a parameter of the type \type(Type.tymtausub ${1}); and returns a value of the type \type(Type.tymtausub ${2}); is defined to be \type(Type.(tymtausub ${1} --> tymtausub ${2}));.
+      %例えば，上で定義した\codem{to-dollar}は
+      %\type(Type.(int --> float));型をもつ．
+      For example, \codem{to-dollar} defined as above has the type \type(Type.(int --> float));.
+      %このことを以降
 
-      \val({to-dollar})(Type.(int --> float));%
+      %\val({to-dollar})(Type.(int --> float));%
 
-      とコロン（${:}）を挟んで式とそれにつく型を並べることで表記する．
+      %とコロン（${:}）を挟んで式とそれにつく型を並べることで表記する．
+      This will be denoted by \val({to-dollar})(Type.(int --> float)); with a colon (${:}) between the expression and the type attached to it.
     }
     +p{
       さて，引数が1個の函数はよいとして，複数の引数をとる函数も
